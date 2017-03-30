@@ -1,14 +1,19 @@
+/**
+ * author: liminjie
+ * date: 2017/3/30
+ * desc: APP注册入口
+ */
+
 import React from "react";
 import {AppRegistry, Text, View} from "react-native";
 import {StackNavigator, TabNavigator, TabNavigatorConfig} from "react-navigation";
 import MovieComingScreen from "./screen/MovieComingScreen";
 import MovieShowScreen from "./screen/MovieShowScreen";
-import * as TabView from "react-navigation";
 
 const TabScreen = TabNavigator({
         正在热映: {screen: MovieShowScreen},
         即将上映: {screen: MovieComingScreen},
-}, {
+    }, {
         tabBarPosition: 'top',
         tabBarOptions: {
             activeTintColor: '#ffffff',
@@ -35,6 +40,5 @@ TabScreen.navigationOptions = {
 const stack = StackNavigator({
     Home: {screen: TabScreen},
 });
-
 
 AppRegistry.registerComponent('app', () => stack);
