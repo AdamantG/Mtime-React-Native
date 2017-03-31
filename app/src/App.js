@@ -5,8 +5,9 @@
  */
 
 import React from "react";
+//noinspection ES6UnusedImports
 import {AppRegistry, Text, View} from "react-native";
-import {StackNavigator, TabNavigator, TabNavigatorConfig} from "react-navigation";
+import {StackNavigator, TabNavigator} from "react-navigation";
 import MovieComingScreen from "./screen/MovieComingScreen";
 import MovieShowScreen from "./screen/MovieShowScreen";
 
