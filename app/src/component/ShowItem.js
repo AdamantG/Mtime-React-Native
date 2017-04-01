@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import {Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 export default class ShowItem extends React.Component {
     render() {
         const movie = this.props.movie;
@@ -24,8 +24,50 @@ export default class ShowItem extends React.Component {
 
             }}>
                 <View style={styles.container}>
-                    <Text>{title}</Text>
                     <Image source={{uri: img}} style={styles.img}/>
+                    <View style={styles.detail}>
+                        <View style={styles.detail_title}>
+                            <Text style={styles.text_title}>{title}  </Text>
+                            <Text style={styles.text_rank}>{rank}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={{
+                                width: 20,
+                                height: 20,
+                                textAlign: 'center',
+                                fontSize: 24,
+                                fontWeight: 'bold',
+                                color: '#ff8601'
+                            }}>“</Text>
+                            <Text style={styles.text_special}>{special}</Text>
+                        </View>
+                        <Text
+                            style={styles.text_date_cinema}>{raiseDate.substring(4, 6) * 1}月{raiseDate.substring(6, 8)}日上映</Text>
+                        <Text style={styles.text_date_cinema}>今日{cinemaCount}家影院上映{showtimeCount}场</Text>
+
+                        <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center'}}>
+                            <View style={{flex: 2, flexDirection: 'row'}}>
+                                <Text style={styles.text_version}>{versions[0].version}</Text>
+                                <Text style={styles.text_version}>{versions[1].version}</Text>
+                                <Text style={styles.text_version}>{versions[2].version}</Text>
+                            </View>
+                            <View style={{
+                                flex: 1,
+                                height: 30,
+                                justifyContent: 'center',
+                                backgroundColor: '#ff8601',
+                                borderRadius: 100
+                            }}>
+
+                                <Text style={{
+                                    color: 'white',
+                                    fontSize: 12,
+                                    textAlign: 'center'
+                                }}>购票</Text>
+                            </View>
+
+                        </View>
+                    </View>
                 </View>
             </TouchableOpacity>
         );
@@ -34,32 +76,51 @@ export default class ShowItem extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
         padding: 10,
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#ffffff',
     },
     img: {
-        width: 90,
-        height: 160,
+        width: 80,
+        height: 123,
     },
-    title: {
-        fontSize: 20,
-        marginBottom: 8,
-        textAlign: 'center',
+    detail: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        alignSelf: 'stretch',
+        marginLeft: 10,
     },
-    year: {
-        textAlign: 'center',
+    detail_title: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
-    thumbnail: {
-        width: 53,
-        height: 81,
+    text_title: {
+        color: '#333333',
+        fontSize: 16,
+        fontWeight: 'bold'
     },
-    listView: {
-        paddingTop: 20,
-        backgroundColor: '#F5FCFF',
+    text_rank: {
+        color: '#5d8a1c',
+        fontStyle: 'italic',
+        fontWeight: 'bold'
+    },
+    text_special: {
+        color: '#ff8601',
+        fontSize: 15,
+    },
+    text_date_cinema: {
+        color: '#999999',
+        fontSize: 12,
+    },
+    text_version: {
+        borderColor: '#999999',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 5,
+        paddingRight: 5,
+        textAlign: 'center'
     },
 });
