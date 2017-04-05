@@ -4,9 +4,9 @@
  * desc: 正在热映的Item
  */
 
-import React from "react";
+import React, {Component} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-export default class ShowItem extends React.Component {
+export default class ShowItem extends Component {
     render() {
         const movie = this.props.movie;
         const img = movie.img;//电影海报
@@ -47,9 +47,9 @@ export default class ShowItem extends React.Component {
 
                         <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center'}}>
                             <View style={{flex: 2, flexDirection: 'row'}}>
-                                <Text style={styles.text_version}>{versions[0].version}</Text>
-                                <Text style={styles.text_version}>{versions[1].version}</Text>
-                                <Text style={styles.text_version}>{versions[2].version}</Text>
+                                <Text style={styles.text_version}>11</Text>
+                                {/*<Text style={styles.text_version}>{versions[1].version}</Text>*/}
+                                {/*<Text style={styles.text_version}>{versions[2].version}</Text>*/}
                             </View>
                             <View style={{
                                 flex: 1,

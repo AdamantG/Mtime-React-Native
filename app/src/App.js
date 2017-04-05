@@ -5,10 +5,9 @@
  */
 
 import React from "react";
-//noinspection ES6UnusedImports
-import {AppRegistry, Text, View} from "react-native";
-import {StackNavigator, TabNavigator} from "react-navigation";
 import MovieComingScreen from "./screen/MovieComingScreen";
+import {StackNavigator, TabNavigator} from "react-navigation";
+import {AppRegistry} from 'react-native';
 import MovieShowScreen from "./screen/MovieShowScreen";
 
 const TabScreen = TabNavigator({
