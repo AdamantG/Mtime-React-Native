@@ -4,10 +4,8 @@
  * desc: 正在热映的Tab页面
  */
 
-import React, {Component} from 'react';
-import {
-    ListView,
-} from 'react-native';
+import React, {Component} from "react";
+import {ListView} from "react-native";
 import ShowItem from "../component/ShowItem";
 
 export default class TabRecentScreen extends Component {

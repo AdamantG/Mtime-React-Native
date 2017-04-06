@@ -7,6 +7,11 @@
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 export default class ShowItem extends Component {
+
+    constructor(props) {
+        super();
+    }
+
     render() {
         const movie = this.props.movie;
         const img = movie.img;//电影海报
@@ -47,9 +52,12 @@ export default class ShowItem extends Component {
 
                         <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center'}}>
                             <View style={{flex: 2, flexDirection: 'row'}}>
-                                <Text style={styles.text_version}>11</Text>
-                                {/*<Text style={styles.text_version}>{versions[1].version}</Text>*/}
-                                {/*<Text style={styles.text_version}>{versions[2].version}</Text>*/}
+                                <Text
+                                    style={[styles.text_version, {borderColor: this.checkVersion(versions[0]) ? '#999999' : 'white',}]}>{this.getVersion(versions[0])}</Text>
+                                <Text
+                                    style={[styles.text_version, {borderColor: this.checkVersion(versions[1]) ? '#999999' : 'white',}]}>{this.getVersion(versions[1])}</Text>
+                                <Text
+                                    style={[styles.text_version, {borderColor: this.checkVersion(versions[2]) ? '#999999' : 'white',}]}>{this.getVersion(versions[2])}</Text>
                             </View>
                             <View style={{
                                 flex: 1,
@@ -58,7 +66,6 @@ export default class ShowItem extends Component {
                                 backgroundColor: '#ff8601',
                                 borderRadius: 100
                             }}>
-
                                 <Text style={{
                                     color: 'white',
                                     fontSize: 12,
@@ -72,6 +79,23 @@ export default class ShowItem extends Component {
             </TouchableOpacity>
         );
     }
+
+    getVersion(versions) {
+        if (versions instanceof Object) {
+            return versions.version;
+        } else {
+            return "";
+        }
+    }
+
+    checkVersion(versions) {
+        if (versions instanceof Object) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 
 const styles = StyleSheet.create({
@@ -116,11 +140,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     text_version: {
-        borderColor: '#999999',
+        fontSize: 12,
         borderWidth: 1,
         borderRadius: 5,
-        paddingLeft: 5,
-        paddingRight: 5,
-        textAlign: 'center'
+        paddingHorizontal: 5,
+        marginHorizontal: 2,
+        textAlign: 'center',
     },
 });
