@@ -63,16 +63,15 @@ export default class ShowItem extends Component {
                                 flex: 1,
                                 height: 30,
                                 justifyContent: 'center',
-                                backgroundColor: '#ff8601',
+                                backgroundColor: ticketing ? '#ff8601' : '#669d0e',
                                 borderRadius: 100
                             }}>
                                 <Text style={{
                                     color: 'white',
                                     fontSize: 12,
                                     textAlign: 'center'
-                                }}>购票</Text>
+                                }}>{this.getTicking(ticketing)}</Text>
                             </View>
-
                         </View>
                     </View>
                 </View>
@@ -80,6 +79,11 @@ export default class ShowItem extends Component {
         );
     }
 
+    /**
+     * 得到标签
+     * @param versions
+     * @returns {string}
+     */
     getVersion(versions) {
         if (versions instanceof Object) {
             return versions.version;
@@ -88,6 +92,11 @@ export default class ShowItem extends Component {
         }
     }
 
+    /**
+     * 检查是否存在标签
+     * @param versions
+     * @returns {boolean}
+     */
     checkVersion(versions) {
         if (versions instanceof Object) {
             return true;
@@ -96,6 +105,14 @@ export default class ShowItem extends Component {
         }
     }
 
+    /**
+     * 得到购票状态
+     * @param ticketing
+     * @returns {string}
+     */
+    getTicking(ticketing) {
+        return ticketing ? "购票" : "预售";
+    }
 }
 
 const styles = StyleSheet.create({
