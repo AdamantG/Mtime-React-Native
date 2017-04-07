@@ -13,7 +13,7 @@ export default class ShowItem extends Component {
     }
 
     render() {
-        const movie = this.props.movie;
+        const movie = this.props.movie.item;
         const img = movie.img;//电影海报
         const title = movie.tCn;//电影中文名
         const rank = movie.r;//评分
