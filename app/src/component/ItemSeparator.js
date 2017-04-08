@@ -10,6 +10,7 @@ import {StyleSheet, View} from "react-native";
 const SEPARATOR_HEIGHT = StyleSheet.hairlineWidth;
 
 export default class ItemSeparator extends Component {
+
     render() {
         return <View style={styles.separator}/>;
     }

@@ -6,11 +6,8 @@
 
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-export default class ShowItem extends Component {
 
-    constructor(props) {
-        super();
-    }
+export default class ShowItem extends Component {
 
     render() {
         const movie = this.props.movie.item;
@@ -25,9 +22,7 @@ export default class ShowItem extends Component {
         const ticketing = movie.isTicket;//售票
 
         return (
-            <TouchableOpacity onPress={() => {
-
-            }}>
+            <TouchableOpacity onPress={this._onPressToDetail}>
                 <View style={styles.container}>
                     <Image source={{uri: img}} style={styles.img}/>
                     <View style={styles.detail}>
@@ -53,11 +48,11 @@ export default class ShowItem extends Component {
                         <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center'}}>
                             <View style={{flex: 2, flexDirection: 'row'}}>
                                 <Text
-                                    style={[styles.text_version, {borderColor: this.checkVersion(versions[0]) ? '#999999' : 'white',}]}>{this.getVersion(versions[0])}</Text>
+                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[0]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[0])}</Text>
                                 <Text
-                                    style={[styles.text_version, {borderColor: this.checkVersion(versions[1]) ? '#999999' : 'white',}]}>{this.getVersion(versions[1])}</Text>
+                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[1]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[1])}</Text>
                                 <Text
-                                    style={[styles.text_version, {borderColor: this.checkVersion(versions[2]) ? '#999999' : 'white',}]}>{this.getVersion(versions[2])}</Text>
+                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[2]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[2])}</Text>
                             </View>
                             <View style={{
                                 flex: 1,
@@ -66,11 +61,14 @@ export default class ShowItem extends Component {
                                 backgroundColor: ticketing ? '#ff8601' : '#669d0e',
                                 borderRadius: 100
                             }}>
-                                <Text style={{
-                                    color: 'white',
-                                    fontSize: 12,
-                                    textAlign: 'center'
-                                }}>{this.getTicking(ticketing)}</Text>
+                                <TouchableOpacity onPress={this._onPressToTicket}>
+                                    <Text style={{
+                                        color: 'white',
+                                        fontSize: 12,
+                                        textAlign: 'center'
+                                    }}>{ShowItem.getTicking(ticketing)}</Text>
+                                </TouchableOpacity>
+
                             </View>
                         </View>
                     </View>
@@ -84,7 +82,7 @@ export default class ShowItem extends Component {
      * @param versions
      * @returns {string}
      */
-    getVersion(versions) {
+    static getVersion(versions) {
         if (versions instanceof Object) {
             return versions.version;
         } else {
@@ -97,12 +95,8 @@ export default class ShowItem extends Component {
      * @param versions
      * @returns {boolean}
      */
-    checkVersion(versions) {
-        if (versions instanceof Object) {
-            return true;
-        } else {
-            return false;
-        }
+    static checkVersion(versions) {
+        return versions instanceof Object;
     }
 
     /**
@@ -110,9 +104,17 @@ export default class ShowItem extends Component {
      * @param ticketing
      * @returns {string}
      */
-    getTicking(ticketing) {
+    static getTicking(ticketing) {
         return ticketing ? "购票" : "预售";
     }
+
+    _onPressToDetail = () => {
+        this.props.navigation.navigate('Detail', {name: 'detail'});
+    };
+
+    _onPressToTicket = () => {
+        this.props.navigation.navigate('Detail', {name: 'ticket'});
+    };
 }
 
 const styles = StyleSheet.create({

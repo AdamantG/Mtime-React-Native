@@ -6,7 +6,9 @@
 
 import React, {Component} from "react";
 import {Text} from "react-native";
+
 export default class TabAllScreen extends Component {
+
     render() {
         return (
             <Text>222</Text>

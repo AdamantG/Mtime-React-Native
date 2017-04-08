@@ -9,6 +9,7 @@ import MovieComingScreen from "./screen/MovieComingScreen";
 import {StackNavigator, TabNavigator} from "react-navigation";
 import {AppRegistry} from "react-native";
 import MovieShowScreen from "./screen/MovieShowScreen";
+import MovieDetailScreen from "./screen/MovieDetailScreen";
 
 const TabScreen = TabNavigator({
         正在热映: {screen: MovieShowScreen},
@@ -39,6 +40,7 @@ TabScreen.navigationOptions = {
 
 const stack = StackNavigator({
     Home: {screen: TabScreen},
+    Detail: {screen: MovieDetailScreen}
 });
 
 AppRegistry.registerComponent('app', () => stack);

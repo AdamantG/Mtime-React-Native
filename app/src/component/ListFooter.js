@@ -8,6 +8,7 @@ import React, {Component} from "react";
 import {StyleSheet, Text} from "react-native";
 
 export default class ListFooter extends Component {
+
     render() {
         return <Text style={styles.text}>人家是有底线的</Text>;
     }
