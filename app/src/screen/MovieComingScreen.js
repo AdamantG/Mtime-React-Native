@@ -7,6 +7,9 @@
 import React, {Component} from "react";
 import {Animated, ScrollView, View} from "react-native";
 
+const TITLE_HEIGHT = 70;
+const HEADER_HEIGHT = 250;
+
 export default class TabAllScreen extends Component {
 
     state = {
@@ -25,31 +28,58 @@ export default class TabAllScreen extends Component {
     }
 
     _renderHeader() {
-        let headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 150],
-            outputRange: [1, 0]
-        })
         return (
-            <View>
-                <Animated.View style={[{backgroundColor: "#ffffff", height: 150}, {opacity: headerOpacity}]}>
+            <View style={{
+                height: HEADER_HEIGHT,
+            }}>
+                <Animated.View
+                    style={[{backgroundColor: "#ffffff", flex: 1}]}>
 
+                </Animated.View>
+                <Animated.View style={[{backgroundColor: "#ffffff", flex: 1}]}>
 
                 </Animated.View>
             </View>
         )
     }
 
-    render() {
+    _renderFixHeader() {
+        //固定Title
+        let title = this.state.scrollY.interpolate({
+            inputRange: [0, TITLE_HEIGHT],
+            outputRange: [0, 0]
+        });
+        //根据滑动距离改变透明度
+        let opacity = this.state.scrollY.interpolate({
+            inputRange: [0, HEADER_HEIGHT - TITLE_HEIGHT],
+            outputRange: [0, 1]
+        });
+        return (
+            <Animated.View
+                style={[{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    backgroundColor: "#1d2635",
+                    height: TITLE_HEIGHT
+                }, {
+                    transform: [{translateY: title}],
+                    opacity: opacity
+                }]}>
+            </Animated.View>
+        );
+    }
 
+    render() {
+        console.log("render()");
         return (
             <View style={{
                 flex: 1,
-                backgroundColor: '#ff6083'
+                backgroundColor: '#333333'
             }}>
                 <ScrollView
-                    style={{
-                        backgroundColor: '#333333'
-                    }}
                     onScroll={Animated.event(
                         [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     )}
@@ -69,6 +99,7 @@ export default class TabAllScreen extends Component {
                     <View style={{backgroundColor: "#6ccfff", height: 60}}/>
                     <View style={{backgroundColor: "#65ff5f", height: 60}}/>
                 </ScrollView>
+                {this._renderFixHeader()}
             </View>
 
         );
