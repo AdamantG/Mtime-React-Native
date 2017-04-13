@@ -5,9 +5,10 @@
  */
 
 import React, {Component} from "react";
-import {Animated, ScrollView, View} from "react-native";
+import {Animated, ScrollView, Text, View, StyleSheet, Image} from "react-native";
 
-const TITLE_HEIGHT = 70;
+const TITLE_HEIGHT = 50;
+const ICON_SIZE = 20;
 const HEADER_HEIGHT = 250;
 
 export default class TabAllScreen extends Component {
@@ -32,13 +33,16 @@ export default class TabAllScreen extends Component {
             <View style={{
                 height: HEADER_HEIGHT,
             }}>
-                <Animated.View
-                    style={[{backgroundColor: "#ffffff", flex: 1}]}>
-
-                </Animated.View>
-                <Animated.View style={[{backgroundColor: "#ffffff", flex: 1}]}>
-
-                </Animated.View>
+                <View style={[{backgroundColor: "#ffffff", flex: 1}]}/>
+                <View style={[{backgroundColor: "#ffffff", flex: 1}]}/>
+                <View style={{
+                    backgroundColor: "#6ccfff",
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                }}/>
             </View>
         )
     }
@@ -56,24 +60,25 @@ export default class TabAllScreen extends Component {
         });
         return (
             <Animated.View
-                style={[{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    backgroundColor: "#1d2635",
-                    height: TITLE_HEIGHT
-                }, {
-                    transform: [{translateY: title}],
-                    opacity: opacity
-                }]}>
+                style={[styles.header, {transform: [{translateY: title}],}]}>
+                <Animated.View style={[styles.headerBackground, {opacity: opacity}]}>
+                    <View style={styles.headerTitle}>
+                        <View><Text style={styles.headerTitleText}>电影名称</Text></View>
+                    </View>
+                </Animated.View>
+                <View style={styles.headerTitle}>
+                    <Image style={[styles.headerIcon, {position: "absolute", left: 10,}]}
+                           source={require('../image/ic_arrow.png')}/>
+                    <Image style={[styles.headerIcon, {position: "absolute", right: 10,}]}
+                           source={require('../image/ic_arrow.png')}/>
+                    <Image style={[styles.headerIcon, {position: "absolute", right: ICON_SIZE + 10 + 10,}]}
+                           source={require('../image/ic_arrow.png')}/>
+                </View>
             </Animated.View>
         );
     }
 
     render() {
-        console.log("render()");
         return (
             <View style={{
                 flex: 1,
@@ -105,3 +110,35 @@ export default class TabAllScreen extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    header: {
+        position: "absolute",
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        height: TITLE_HEIGHT,
+    },
+    headerTitle: {
+        position: "absolute",
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    headerTitleText: {
+        color: 'white',
+        fontSize: 18,
+    },
+    headerBackground: {
+        backgroundColor: "#1d2635",
+        height: TITLE_HEIGHT
+    },
+    headerIcon: {
+        width: ICON_SIZE,
+        height: ICON_SIZE,
+    },
+});
