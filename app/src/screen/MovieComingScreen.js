@@ -65,17 +65,14 @@ export default class TabAllScreen extends Component {
                     </View>
                 </Animated.View>
                 <View style={styles.headerTitle}>
-                    <TouchableOpacity >
-                        <Image source={require('../image/ic_arrow.png')}
-                               style={[styles.headerIcon, {position: "absolute", left: 10,}]}/>
+                    <TouchableOpacity style={{position: "absolute", left: 10,}}>
+                        <Image source={require('../image/ic_arrow.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image source={collectImg}
-                               style={[styles.headerIcon, {position: "absolute", right: ICON_SIZE + 10 + 10,}]}/>
+                    <TouchableOpacity style={{position: "absolute", right: ICON_SIZE + 10 + 10,}}>
+                        <Image source={collectImg} style={styles.headerIcon}/>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image source={require('../image/ic_share.png')}
-                               style={[styles.headerIcon, {position: "absolute", right: 10,}]}/>
+                    <TouchableOpacity style={{position: "absolute", right: 10,}}>
+                        <Image source={require('../image/ic_share.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
                 </View>
             </Animated.View>
