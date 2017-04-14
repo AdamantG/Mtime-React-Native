@@ -4,6 +4,8 @@
  * desc: 正在热映的Item
  */
 
+'use strict';
+
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 

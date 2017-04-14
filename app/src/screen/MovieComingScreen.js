@@ -4,6 +4,8 @@
  * desc: 即将上映的Tab页面
  */
 
+'use strict';
+
 import React, {Component} from "react";
 import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 

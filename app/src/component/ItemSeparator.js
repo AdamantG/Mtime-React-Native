@@ -4,6 +4,8 @@
  * desc:列表分隔线
  */
 
+'use strict';
+
 import React, {Component} from "react";
 import {StyleSheet, View} from "react-native";
 

@@ -4,6 +4,8 @@
  * desc: APP注册入口
  */
 
+'use strict';
+
 import React from "react";
 import MovieComingScreen from "./screen/MovieComingScreen";
 import {StackNavigator, TabNavigator} from "react-navigation";

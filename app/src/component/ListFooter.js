@@ -4,6 +4,8 @@
  * desc:列表底部Footer
  */
 
+'use strict';
+
 import React, {Component} from "react";
 import {StyleSheet, Text} from "react-native";
 

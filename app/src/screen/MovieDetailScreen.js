@@ -4,6 +4,8 @@
  * desc: 电影详情页面
  */
 
+'use strict';
+
 import React, {Component} from "react";
 import {Text} from "react-native";
 
