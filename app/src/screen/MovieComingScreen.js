@@ -55,7 +55,7 @@ export default class TabAllScreen extends Component {
             outputRange: [0, 1]
         });
         //收藏图标
-        let collectImg = this.state.collected ? require('../image/ic_star_selected.png') : require('../image/ic_star_normal.png');
+        let collectImg = this.state.collected ? require('../image/ic_collect_selected.png') : require('../image/ic_collect_normal.png');
         return (
             <Animated.View
                 style={[styles.header, {transform: [{translateY: title}],}]}>
@@ -65,13 +65,22 @@ export default class TabAllScreen extends Component {
                     </View>
                 </Animated.View>
                 <View style={styles.headerTitle}>
-                    <TouchableOpacity style={{position: "absolute", left: 10,}}>
+                    <TouchableOpacity
+                        style={{position: "absolute", left: 10,}}
+                        onPress={this._onPressBack}
+                    >
                         <Image source={require('../image/ic_arrow.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{position: "absolute", right: ICON_SIZE + 10 + 10,}}>
+                    <TouchableOpacity
+                        style={{position: "absolute", right: ICON_SIZE + 10 + 10,}}
+                        onPress={this._onPressCollect}
+                    >
                         <Image source={collectImg} style={styles.headerIcon}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{position: "absolute", right: 10,}}>
+                    <TouchableOpacity
+                        style={{position: "absolute", right: 10,}}
+                        onPress={this._onPressShare}
+                    >
                         <Image source={require('../image/ic_share.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
                 </View>
@@ -109,6 +118,19 @@ export default class TabAllScreen extends Component {
             </View>
 
         );
+    }
+
+    _onPressBack = () => {
+    }
+
+    _onPressCollect = () => {
+        this.setState({
+            collected: !this.state.collected,
+        })
+    }
+
+    _onPressShare = () => {
+
     }
 }
 
