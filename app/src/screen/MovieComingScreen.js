@@ -5,7 +5,7 @@
  */
 
 import React, {Component} from "react";
-import {Animated, ScrollView, Text, View, StyleSheet, Image} from "react-native";
+import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
 const TITLE_HEIGHT = 50;
 const ICON_SIZE = 20;
@@ -14,18 +14,12 @@ const HEADER_HEIGHT = 250;
 export default class TabAllScreen extends Component {
 
     state = {
-        fadeAnim: new Animated.Value(0),
         scrollY: new Animated.Value(0),
-    }
+        collected: false,
+    };
 
     componentDidMount() {
-        Animated.timing(
-            this.state.fadeAnim,
-            {
-                toValue: 1,
-                duration: 10000,
-            },
-        ).start();
+
     }
 
     _renderHeader() {
@@ -58,6 +52,8 @@ export default class TabAllScreen extends Component {
             inputRange: [0, HEADER_HEIGHT - TITLE_HEIGHT],
             outputRange: [0, 1]
         });
+        //收藏图标
+        let collectImg = this.state.collected ? require('../image/ic_star_selected.png') : require('../image/ic_star_normal.png');
         return (
             <Animated.View
                 style={[styles.header, {transform: [{translateY: title}],}]}>
@@ -67,12 +63,18 @@ export default class TabAllScreen extends Component {
                     </View>
                 </Animated.View>
                 <View style={styles.headerTitle}>
-                    <Image style={[styles.headerIcon, {position: "absolute", left: 10,}]}
-                           source={require('../image/ic_arrow.png')}/>
-                    <Image style={[styles.headerIcon, {position: "absolute", right: 10,}]}
-                           source={require('../image/ic_arrow.png')}/>
-                    <Image style={[styles.headerIcon, {position: "absolute", right: ICON_SIZE + 10 + 10,}]}
-                           source={require('../image/ic_arrow.png')}/>
+                    <TouchableOpacity >
+                        <Image source={require('../image/ic_arrow.png')}
+                               style={[styles.headerIcon, {position: "absolute", left: 10,}]}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image source={collectImg}
+                               style={[styles.headerIcon, {position: "absolute", right: ICON_SIZE + 10 + 10,}]}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image source={require('../image/ic_share.png')}
+                               style={[styles.headerIcon, {position: "absolute", right: 10,}]}/>
+                    </TouchableOpacity>
                 </View>
             </Animated.View>
         );
