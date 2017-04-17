@@ -8,37 +8,101 @@
 
 import React, {Component} from "react";
 import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {NavigationActions} from "react-navigation";
 
 const TITLE_HEIGHT = 50;
 const ICON_SIZE = 20;
 const HEADER_HEIGHT = 250;
+const DEFAULT_MARGIN = 20;
 
-export default class TabAllScreen extends Component {
+export default class MovieComingScreen extends Component {
 
     state = {
+        data: null,
         scrollY: new Animated.Value(0),
         collected: false,
     };
 
     componentDidMount() {
+        let movieId = this.props.navigation.state.movieId;
+        if (movieId instanceof Object) {
 
+        } else {
+            movieId = 125805;
+        }
+        let url = 'https://ticket-api-m.mtime.cn/movie/detail.api?locationId=365&movieId=' + movieId;
+        fetch(url)
+            .then((response) => response.json())
+            .then((responseData) => {
+                // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
+                console.log(responseData);
+                this.setState({
+                    data: responseData.data,
+                });
+            });
     }
 
     _renderHeader() {
+        let img = 'http://img5.mtime.cn/mt/2017/04/13/092925.62009817_1280X720X2.jpg';
+
+        // console.log(this.state.data);
+        // let img;
+        // if (this.state.data.basic.img instanceof Object) {
+        //     img = this.state.data.basic.img;
+        // } else {
+        //     let img = 'http://img5.mtime.cn/mt/2017/04/13/092925.62009817_1280X720X2.jpg';
+        // }
+
         return (
             <View style={{
                 height: HEADER_HEIGHT,
             }}>
-                <View style={[{backgroundColor: "#ffffff", flex: 1}]}/>
+                <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
+                       style={[{backgroundColor: "#ffffff", flex: 1.05}]}/>
                 <View style={[{backgroundColor: "#ffffff", flex: 1}]}/>
                 <View style={{
-                    backgroundColor: "#6ccfff",
                     position: "absolute",
                     left: 0,
                     right: 0,
-                    top: 0,
+                    top: HEADER_HEIGHT * (1 / 3),
                     bottom: 0,
-                }}/>
+                    flexDirection: 'row'
+                }}>
+                    <View style={[{backgroundColor: "#ffffff", marginLeft: 7}]}>
+                        <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
+                               style={[{width: 100, height: 155, margin: 2}]}/>
+                    </View>
+                    <View style={[{flexDirection: 'column', flex: 2.5, marginHorizontal: 5}]}>
+                        <Text style={{fontSize: 16, color: '#ffffff'}}>电影名称</Text>
+                        <Text style={{color: '#ffffff'}}>English</Text>
+                        <Text style={{color: '#333333', marginTop: 5}}>90分钟</Text>
+                        <Text style={{color: '#333333', marginTop: 5}}>剧情/悬疑</Text>
+                        <Text style={{color: '#333333', marginTop: 5}}>2017年03月31日中国上映</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                            <Text style={{
+                                width: 20,
+                                height: 20,
+                                textAlign: 'center',
+                                fontSize: 24,
+                                fontWeight: 'bold',
+                                color: '#ff8601'
+                            }}>“</Text>
+                            <Text style={{color: '#ff8601', fontSize: 14,}}>一句话评价</Text>
+                        </View>
+                    </View>
+                    <View style={{
+                        width: 43,
+                        height: 43,
+                        backgroundColor: '#639e02',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 30,
+                        marginRight: 10,
+                    }}>
+                        <Text style={{color: '#ffffff'}}>7.4</Text>
+                    </View>
+                </View>
             </View>
         )
     }
@@ -99,9 +163,12 @@ export default class TabAllScreen extends Component {
                         [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     )}
                     scrollEventThrottle={16}
+                    style={{
+                        backgroundColor: '#ebebeb',
+                    }}
                 >
                     {this._renderHeader()}
-                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
+                    <View style={{backgroundColor: "#ff4f5c", height: 60, marginTop: DEFAULT_MARGIN}}/>
                     <View style={{backgroundColor: "#eaff5d", height: 60}}/>
                     <View style={{backgroundColor: "#6ccfff", height: 60}}/>
                     <View style={{backgroundColor: "#65ff5f", height: 60}}/>
@@ -121,6 +188,7 @@ export default class TabAllScreen extends Component {
     }
 
     _onPressBack = () => {
+        this.props.navigation.dispatch(NavigationActions.back());
     }
 
     _onPressCollect = () => {

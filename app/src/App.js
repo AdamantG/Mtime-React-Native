@@ -11,11 +11,10 @@ import MovieComingScreen from "./screen/MovieComingScreen";
 import {StackNavigator, TabNavigator} from "react-navigation";
 import {AppRegistry} from "react-native";
 import MovieShowScreen from "./screen/MovieShowScreen";
-import MovieDetailScreen from "./screen/MovieDetailScreen";
 
 const TabScreen = TabNavigator({
-        即将上映: {screen: MovieComingScreen},
     正在热映: {screen: MovieShowScreen},
+    即将上映: {screen: MovieComingScreen},
     }, {
         tabBarPosition: 'top',
         tabBarOptions: {
@@ -38,11 +37,14 @@ TabScreen.navigationOptions = {
     header: {
         visible: false
     },
-}
+};
 
 const stack = StackNavigator({
     Home: {screen: TabScreen},
-    Detail: {screen: MovieDetailScreen}
+    Detail: {screen: MovieComingScreen}
+}, {
+    headerMode: 'none',
 });
+
 
 AppRegistry.registerComponent('app', () => stack);
