@@ -113,7 +113,7 @@ export default class ShowItem extends Component {
     _onPressToDetail = () => {
         const movie = this.props.movie.item;
         const movieId = movie.id;
-        this.props.navigation.navigate('Detail', {movieId: {movieId}});
+        this.props.navigation.navigate('Detail', {movieId: movieId});
     };
 
     _onPressToTicket = () => {

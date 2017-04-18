@@ -18,40 +18,91 @@ const DEFAULT_MARGIN = 20;
 export default class MovieComingScreen extends Component {
 
     state = {
-        data: null,
-        scrollY: new Animated.Value(0),
-        collected: false,
+        data: null,//json
+        scrollY: new Animated.Value(0),//Y轴滑动距离
+        collected: false,//顶部收藏
+        fetched: false,//请求得到数据
+        storyExpanded: false,
     };
 
     componentDidMount() {
-        let movieId = this.props.navigation.state.movieId;
-        if (movieId instanceof Object) {
-
-        } else {
-            movieId = 125805;
+        let id = -1;
+        try {
+            const params = this.props.navigation.state.params;
+            id = params.movieId;
+        } catch (error) {
         }
+        let movieId = id > -1 ? id : 125805;
         let url = 'https://ticket-api-m.mtime.cn/movie/detail.api?locationId=365&movieId=' + movieId;
+        console.log(movieId);
         fetch(url)
             .then((response) => response.json())
             .then((responseData) => {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
-                console.log(responseData);
                 this.setState({
+                    fetched: true,
                     data: responseData.data,
                 });
             });
     }
 
-    _renderHeader() {
-        let img = 'http://img5.mtime.cn/mt/2017/04/13/092925.62009817_1280X720X2.jpg';
+    render() {
+        return (
+            <View style={{
+                flex: 1,
+                backgroundColor: '#333333'
+            }}>
+                <ScrollView
+                    onScroll={Animated.event(
+                        [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
+                    )}
+                    scrollEventThrottle={16}
+                    style={{
+                        backgroundColor: '#ebebeb',
+                    }}
+                >
+                    {this._renderHeader()}
+                    {this._renderStory()}
+                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
+                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
+                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
+                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
+                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
+                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
+                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
+                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
+                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
+                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
+                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
+                </ScrollView>
+                {this._renderFixHeader()}
+            </View>
 
-        // console.log(this.state.data);
-        // let img;
-        // if (this.state.data.basic.img instanceof Object) {
-        //     img = this.state.data.basic.img;
-        // } else {
-        //     let img = 'http://img5.mtime.cn/mt/2017/04/13/092925.62009817_1280X720X2.jpg';
-        // }
+        );
+    }
+
+    _renderHeader() {
+        let img;
+        if (this.state.fetched) {
+            img = this.state.data.basic.img;
+        } else {
+            img = '#949494';
+        }
+        const name = this.state.fetched ? this.state.data.basic.name : '电影名称';
+        const nameEn = this.state.fetched ? this.state.data.basic.nameEn : 'Movie Name';
+        const mins = this.state.fetched ? this.state.data.basic.mins : '影片时长';
+        const typeArray = this.state.fetched ? this.state.data.basic.type : '影片类型';
+        let type = '';
+        for (let i = 0; i < typeArray.length; i++) {
+            type = type + typeArray[i];
+            if (i != typeArray.length - 1) {
+                type = type + '/';
+            }
+        }
+        const releaseDate = this.state.fetched ? this.state.data.basic.releaseDate : '上映时间';
+        const releaseArea = this.state.fetched ? this.state.data.basic.releaseArea : '地区';
+        const commentSpecial = this.state.fetched ? this.state.data.basic.commentSpecial : '评价';
+        const rate = this.state.fetched ? this.state.data.basic.overallRating : '评分';
 
         return (
             <View style={{
@@ -73,11 +124,14 @@ export default class MovieComingScreen extends Component {
                                style={[{width: 100, height: 155, margin: 2}]}/>
                     </View>
                     <View style={[{flexDirection: 'column', flex: 2.5, marginHorizontal: 5}]}>
-                        <Text style={{fontSize: 16, color: '#ffffff'}}>电影名称</Text>
-                        <Text style={{color: '#ffffff'}}>English</Text>
-                        <Text style={{color: '#333333', marginTop: 5}}>90分钟</Text>
-                        <Text style={{color: '#333333', marginTop: 5}}>剧情/悬疑</Text>
-                        <Text style={{color: '#333333', marginTop: 5}}>2017年03月31日中国上映</Text>
+                        <Text style={{fontSize: 16, color: '#ffffff'}}>{name}</Text>
+                        <Text numberOfLines={1} style={{color: '#ffffff'}}>{nameEn}</Text>
+                        <Text style={{color: '#333333', marginTop: 5}}>{mins}</Text>
+                        <Text style={{color: '#333333', marginTop: 5}}>{type}</Text>
+                        <Text style={{
+                            color: '#333333',
+                            marginTop: 5
+                        }}>{releaseDate.substring(4, 6) * 1}月{releaseDate.substring(6, 8)}日{releaseArea}上映</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                             <Text style={{
                                 width: 20,
@@ -87,7 +141,7 @@ export default class MovieComingScreen extends Component {
                                 fontWeight: 'bold',
                                 color: '#ff8601'
                             }}>“</Text>
-                            <Text style={{color: '#ff8601', fontSize: 14,}}>一句话评价</Text>
+                            <Text numberOfLines={1} style={{color: '#ff8601', fontSize: 14,}}>{commentSpecial}</Text>
                         </View>
                     </View>
                     <View style={{
@@ -100,7 +154,7 @@ export default class MovieComingScreen extends Component {
                         marginTop: 30,
                         marginRight: 10,
                     }}>
-                        <Text style={{color: '#ffffff'}}>7.4</Text>
+                        <Text style={{color: '#ffffff'}}>{rate}</Text>
                     </View>
                 </View>
             </View>
@@ -120,12 +174,13 @@ export default class MovieComingScreen extends Component {
         });
         //收藏图标
         let collectImg = this.state.collected ? require('../image/ic_collect_selected.png') : require('../image/ic_collect_normal.png');
+        const name = this.state.fetched ? this.state.data.basic.name : '电影名称';
         return (
             <Animated.View
                 style={[styles.header, {transform: [{translateY: title}],}]}>
                 <Animated.View style={[styles.headerBackground, {opacity: opacity}]}>
                     <View style={styles.headerTitle}>
-                        <View><Text style={styles.headerTitleText}>电影名称</Text></View>
+                        <View><Text style={styles.headerTitleText}>{name}</Text></View>
                     </View>
                 </Animated.View>
                 <View style={styles.headerTitle}>
@@ -152,40 +207,25 @@ export default class MovieComingScreen extends Component {
         );
     }
 
-    render() {
-        return (
-            <View style={{
-                flex: 1,
-                backgroundColor: '#333333'
-            }}>
-                <ScrollView
-                    onScroll={Animated.event(
-                        [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
-                    )}
-                    scrollEventThrottle={16}
-                    style={{
-                        backgroundColor: '#ebebeb',
-                    }}
-                >
-                    {this._renderHeader()}
-                    <View style={{backgroundColor: "#ff4f5c", height: 60, marginTop: DEFAULT_MARGIN}}/>
-                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
-                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
-                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
-                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
-                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
-                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
-                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
-                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
-                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
-                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
-                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
-                </ScrollView>
-                {this._renderFixHeader()}
-            </View>
+    _renderStory() {
 
+        const story = this.state.fetched ? this.state.data.basic.story : '';
+        const storyIcon = this.state.storyExpanded ? require('../image/ic_story_collapse.png') : require('../image/ic_story_expand.png');
+        return (
+            <View style={{backgroundColor: "#ffffff", marginTop: DEFAULT_MARGIN, flexDirection: 'column'}}>
+                <Text>剧情：{story}</Text>
+                <TouchableOpacity onPress={() => {
+                    this.setState({
+                        storyExpanded: !this.state.storyExpanded
+                    });
+                }}>
+                    <Image source={{uri: storyIcon}}/>
+                </TouchableOpacity>
+
+            </View>
         );
     }
+
 
     _onPressBack = () => {
         this.props.navigation.dispatch(NavigationActions.back());
