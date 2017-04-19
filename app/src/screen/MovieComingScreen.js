@@ -282,9 +282,13 @@ const styles = StyleSheet.create({
         height: ICON_SIZE,
     },
     storyExpand: {
+        color: '#333333',
+        fontSize: 14,
         lineHeight: 22,
     },
     storyCollapse: {
+        color: '#333333',
+        fontSize: 14,
         height: 40,
         lineHeight: 22,
     }
