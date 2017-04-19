@@ -210,16 +210,25 @@ export default class MovieComingScreen extends Component {
     _renderStory() {
 
         const story = this.state.fetched ? this.state.data.basic.story : '';
+        const storyStyle = this.state.storyExpanded ? styles.storyExpand : styles.storyCollapse;
         const storyIcon = this.state.storyExpanded ? require('../image/ic_story_collapse.png') : require('../image/ic_story_expand.png');
         return (
-            <View style={{backgroundColor: "#ffffff", marginTop: DEFAULT_MARGIN, flexDirection: 'column'}}>
-                <Text>剧情：{story}</Text>
+            <View style={{
+                backgroundColor: "#ffffff",
+                marginTop: DEFAULT_MARGIN,
+                flexDirection: 'column',
+                paddingTop: 10,
+                paddingLeft: 10,
+                paddingRight: 10,
+                alignItems: 'center'
+            }}>
+                <Text style={[storyStyle]}>剧情：{story}</Text>
                 <TouchableOpacity onPress={() => {
                     this.setState({
                         storyExpanded: !this.state.storyExpanded
                     });
                 }}>
-                    <Image source={{uri: storyIcon}}/>
+                    <Image source={storyIcon} resizeMode={Image.resizeMode.center} style={{height: 20, margin: 5}}/>
                 </TouchableOpacity>
 
             </View>
@@ -272,4 +281,11 @@ const styles = StyleSheet.create({
         width: ICON_SIZE,
         height: ICON_SIZE,
     },
+    storyExpand: {
+        lineHeight: 22,
+    },
+    storyCollapse: {
+        height: 40,
+        lineHeight: 22,
+    }
 });
