@@ -63,6 +63,7 @@ export default class MovieComingScreen extends Component {
                 >
                     {this._renderHeader()}
                     {this._renderStory()}
+                    {this._renderDirectorActor()}
                     <View style={{backgroundColor: "#eaff5d", height: 60}}/>
                     <View style={{backgroundColor: "#6ccfff", height: 60}}/>
                     <View style={{backgroundColor: "#65ff5f", height: 60}}/>
@@ -81,6 +82,7 @@ export default class MovieComingScreen extends Component {
         );
     }
 
+    //详情卡片
     _renderHeader() {
         let img;
         if (this.state.fetched) {
@@ -109,7 +111,7 @@ export default class MovieComingScreen extends Component {
                 height: HEADER_HEIGHT,
             }}>
                 <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
-                       style={[{backgroundColor: "#ffffff", flex: 1.05}]}/>
+                       style={[{backgroundColor: "#ffffff", flex: 1}]}/>
                 <View style={[{backgroundColor: "#ffffff", flex: 1}]}/>
                 <View style={{
                     position: "absolute",
@@ -161,6 +163,7 @@ export default class MovieComingScreen extends Component {
         )
     }
 
+    //滚动收缩后的头部
     _renderFixHeader() {
         //固定Title
         let title = this.state.scrollY.interpolate({
@@ -207,6 +210,7 @@ export default class MovieComingScreen extends Component {
         );
     }
 
+    //剧情简介
     _renderStory() {
 
         const story = this.state.fetched ? this.state.data.basic.story : '';
@@ -235,6 +239,19 @@ export default class MovieComingScreen extends Component {
         );
     }
 
+    //导演&演员
+    _renderDirectorActor() {
+
+        return (
+            <View style={{
+                backgroundColor: "#ffffff",
+                marginTop: DEFAULT_MARGIN,
+                height: 150,
+                flexDirection: 'column',
+            }}>
+            </View>
+        );
+    }
 
     _onPressBack = () => {
         this.props.navigation.dispatch(NavigationActions.back());
@@ -247,6 +264,28 @@ export default class MovieComingScreen extends Component {
     }
 
     _onPressShare = () => {
+
+    }
+}
+
+class Actor extends Component {
+    render() {
+        const img = this.props.img;
+        const name = this.props.name;
+        const nameEn = this.props.nameEn;
+        const roleName = this.props.roleName;
+        return (
+            <View style={{
+                width: 60,
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}>
+                <Image source={{uri: img}} style={{size: 50}}/>
+                <Text>{name}</Text>
+                <Text>{nameEn}</Text>
+                <Text>饰:{roleName}</Text>
+            </View>
+        );
 
     }
 }

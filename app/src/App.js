@@ -13,8 +13,9 @@ import {AppRegistry} from "react-native";
 import MovieShowScreen from "./screen/MovieShowScreen";
 
 const TabScreen = TabNavigator({
+
+    即将上映: {screen: MovieComingScreen},
     正在热映: {screen: MovieShowScreen},
-    即将上映: {screen: MovieShowScreen},
     }, {
         tabBarPosition: 'top',
         tabBarOptions: {
