@@ -241,49 +241,285 @@ export default class MovieComingScreen extends Component {
 
     //导演&演员
     _renderDirectorActor() {
-
+        // const actors = this.state.data.basic.actors;
+        // const director = this.state.data.basic.director;
+        const director = {
+            "directorId": 903521,
+            "img": "http://img31.mtime.cn/ph/2016/09/02/144150.57291017_1280X720X2.jpg",
+            "name": "D·J·卡卢索",
+            "nameEn": "D.J. Caruso"
+        };
+        const actors = [
+            {
+                "actorId": 913378,
+                "img": "http://img31.mtime.cn/ph/2014/09/01/170748.64755972_1280X720X2.jpg",
+                "name": "范·迪塞尔",
+                "nameEn": "Vin Diesel",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145450.41310609.jpg",
+                "roleName": "多米尼克·托莱多"
+            },
+            {
+                "actorId": 912746,
+                "img": "http://img5.mtime.cn/ph/2016/12/16/113419.88212648_1280X720X2.jpg",
+                "name": "道恩·强森",
+                "nameEn": "Dwayne Johnson",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145502.47656575.jpg",
+                "roleName": "卢克·霍布斯"
+            },
+            {
+                "actorId": 923232,
+                "img": "http://img31.mtime.cn/ph/2014/08/06/135708.93055500_1280X720X2.jpg",
+                "name": "查理兹·塞隆",
+                "nameEn": "Charlize Theron",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145523.95072264.jpg",
+                "roleName": "塞弗"
+            },
+            {
+                "actorId": 912464,
+                "img": "http://img31.mtime.cn/ph/2014/03/17/100024.35937750_1280X720X2.jpg",
+                "name": "杰森·斯坦森",
+                "nameEn": "Jason Statham",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145514.14658869.jpg",
+                "roleName": "德卡特·肖"
+            },
+            {
+                "actorId": 937947,
+                "img": "http://img31.mtime.cn/ph/2014/03/14/153310.59934779_1280X720X2.jpg",
+                "name": "米歇尔·罗德里格兹",
+                "nameEn": "Michelle Rodriguez",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145606.29346955.jpg",
+                "roleName": "莱蒂"
+            },
+            {
+                "actorId": 1762245,
+                "img": "http://img31.mtime.cn/ph/2015/04/13/163248.27065805_1280X720X2.jpg",
+                "name": "娜塔莉·艾玛努埃尔",
+                "nameEn": "Nathalie Emmanuel",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145628.36166369.jpg",
+                "roleName": "拉姆齐"
+            },
+            {
+                "actorId": 901235,
+                "img": "http://img31.mtime.cn/ph/2015/04/27/162743.33568954_1280X720X2.jpg",
+                "name": "库尔特·拉塞尔",
+                "nameEn": "Kurt Russell",
+                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145547.43070490.jpg",
+                "roleName": "无名氏先生"
+            },
+            {
+                "actorId": 1264937,
+                "img": "http://img31.mtime.cn/ph/2014/05/01/161031.89864319_1280X720X2.jpg",
+                "name": "斯科特·伊斯特伍德",
+                "nameEn": "Scott Eastwood",
+                "roleImg": "",
+                "roleName": "小无名氏先生"
+            },
+            {
+                "actorId": 914213,
+                "img": "http://img31.mtime.cn/ph/2016/08/25/172352.92378397_1280X720X2.jpg",
+                "name": "泰瑞斯·吉布森",
+                "nameEn": "Tyrese Gibson",
+                "roleImg": "",
+                "roleName": "罗曼"
+            },
+            {
+                "actorId": 931076,
+                "img": "http://img31.mtime.cn/ph/2016/08/25/173424.86239571_1280X720X2.jpg",
+                "name": "卢达·克里斯",
+                "nameEn": "Ludacris",
+                "roleImg": "",
+                "roleName": "特佳"
+            },
+            {
+                "actorId": 936981,
+                "img": "http://img31.mtime.cn/ph/2014/03/14/153427.50328146_1280X720X2.jpg",
+                "name": "海伦·米伦",
+                "nameEn": "Helen Mirren",
+                "roleImg": "",
+                "roleName": "Magdalene Shaw       (uncredited)"
+            },
+            {
+                "actorId": 914501,
+                "img": "http://img31.mtime.cn/ph/2016/08/26/165754.93484957_1280X720X2.jpg",
+                "name": "埃尔莎·帕塔奇",
+                "nameEn": "Elsa Pataky",
+                "roleImg": "",
+                "roleName": "Elena"
+            },
+            {
+                "actorId": 1645713,
+                "img": "http://img31.mtime.cn/ph/2016/04/15/094031.35608362_1280X720X2.jpg",
+                "name": "卢克·伊万斯",
+                "nameEn": "Luke Evans",
+                "roleImg": "",
+                "roleName": "Owen"
+            },
+            {
+                "actorId": 1466328,
+                "img": "http://img5.mtime.cn/ph/2017/04/14/111553.21082716_1280X720X2.jpg",
+                "name": "克里斯托弗·海维尤",
+                "nameEn": "Kristofer Hivju",
+                "roleImg": "",
+                "roleName": "Rhodes"
+            },
+            {
+                "actorId": 2136738,
+                "img": "http://img5.mtime.cn/ph/2017/04/14/111920.71006196_1280X720X2.jpg",
+                "name": "艾登·艾斯特拉",
+                "nameEn": "Eden Estrella",
+                "roleImg": "",
+                "roleName": "Sam"
+            },
+            {
+                "actorId": 919056,
+                "img": "http://img5.mtime.cn/ph/2017/04/14/111730.81740493_1280X720X2.jpg",
+                "name": "",
+                "nameEn": "Celestin Cornielle",
+                "roleImg": "",
+                "roleName": "Raldo"
+            },
+            {
+                "actorId": 2207753,
+                "img": "http://img5.mtime.cn/ph/2017/04/14/111825.77444506_1280X720X2.jpg",
+                "name": "",
+                "nameEn": "Janmarco Santiago",
+                "roleImg": "",
+                "roleName": "Fernando"
+            },
+            {
+                "actorId": 2111414,
+                "img": "http://img31.mtime.cn/ph/2016/03/18/151902.31570214_1280X720X2.jpg",
+                "name": "",
+                "nameEn": "Marko Caka",
+                "roleImg": "",
+                "roleName": "Operative       (uncredited)"
+            },
+            {
+                "actorId": 2203565,
+                "img": "http://img31.mtime.cn/ph/2016/08/30/100330.15393071_1280X720X2.jpg",
+                "name": "",
+                "nameEn": "Ágúst Bjarnason",
+                "roleImg": "",
+                "roleName": "Lieutenant Branson       (uncredited)"
+            },
+            {
+                "actorId": 2205648,
+                "img": "http://img5.mtime.cn/ph/2017/04/13/172736.15043526_1280X720X2.jpg",
+                "name": "",
+                "nameEn": "Benjamin Donlow",
+                "roleImg": "",
+                "roleName": "Business Pedestrian       (uncredited)"
+            }];
         return (
             <View style={{
                 backgroundColor: "#ffffff",
                 marginTop: DEFAULT_MARGIN,
-                height: 150,
-                flexDirection: 'column',
             }}>
+                <ScrollView horizontal={true}>
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={{padding: 5}}>
+                            <View style={{
+                                height: 40,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: 5
+                            }}><Text style={{color: '#474747', fontSize: 16}}>导演</Text></View>
+                            <Director director={director}/>
+                        </View>
+                        <View style={{width: 10, justifyContent: 'center', alignItems: 'flex-start'}}><View
+                            style={{width: 10, backgroundColor: '#939393', marginTop: 50}}/></View>
+                        <View style={{padding: 5}}>
+                            <View style={{
+                                height: 40,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: 5
+                            }}><Text style={{color: '#474747', fontSize: 16}}>主要演员</Text></View>
+                            <View style={{
+                                flexDirection: 'row'
+                            }}>
+                                {
+                                    actors.map((actor, i) => {
+                                        return (
+                                            <Actor key={i} actor={actor}/>
+                                        )
+                                    })
+                                }
+                            </View>
+                        </View>
+                    </View>
+
+                </ScrollView>
+                <View style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                }}>
+                    <Text>全部</Text>
+                </View>
             </View>
+
         );
     }
 
     _onPressBack = () => {
         this.props.navigation.dispatch(NavigationActions.back());
-    }
+    };
 
     _onPressCollect = () => {
         this.setState({
             collected: !this.state.collected,
         })
-    }
+    };
 
     _onPressShare = () => {
+
+    };
+}
+
+class Director extends Component {
+    render() {
+        const director = this.props.director;
+        const img = director.img;
+        const name = director.name;
+        const nameEn = director.nameEn;
+        return (
+            <View style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: 5
+            }}>
+                <Image source={{uri: img}} style={{width: 100, height: 100, marginBottom: 5}}/>
+                <Text numberOfLines={1}
+                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{name}</Text>
+                <Text numberOfLines={1}
+                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{nameEn}</Text>
+            </View>
+        );
 
     }
 }
 
 class Actor extends Component {
     render() {
-        const img = this.props.img;
-        const name = this.props.name;
-        const nameEn = this.props.nameEn;
-        const roleName = this.props.roleName;
+        const actor = this.props.actor;
+        const img = actor.img;
+        const name = actor.name;
+        const nameEn = actor.nameEn;
+        const roleName = actor.roleName;
         return (
             <View style={{
-                width: 60,
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
+                padding: 5
             }}>
-                <Image source={{uri: img}} style={{size: 50}}/>
-                <Text>{name}</Text>
-                <Text>{nameEn}</Text>
-                <Text>饰:{roleName}</Text>
+                <Image source={{uri: img}} style={{width: 100, height: 100, marginBottom: 5}}/>
+                <Text numberOfLines={1}
+                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{name}</Text>
+                <Text numberOfLines={1}
+                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{nameEn}</Text>
+                <Text numberOfLines={1}
+                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>饰:{roleName}</Text>
             </View>
         );
 
@@ -330,5 +566,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         height: 40,
         lineHeight: 22,
-    }
+    },
+    textNormal: {
+        color: '#333333',
+        fontSize: 14,
+    },
 });
