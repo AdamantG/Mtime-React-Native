@@ -66,17 +66,9 @@ export default class MovieComingScreen extends Component {
                     {this._renderDirectorActor()}
                     {this._renderVideoImg()}
                     {this._renderMovieAnalyse()}
-                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
+                    {this._renderMiniComment()}
+                    {this._renderPlusComment()}
                     <View style={{backgroundColor: "#6ccfff", height: 60}}/>
-                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
-                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
-                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
-                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
-                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
-                    <View style={{backgroundColor: "#ff4f5c", height: 60}}/>
-                    <View style={{backgroundColor: "#eaff5d", height: 60}}/>
-                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
-                    <View style={{backgroundColor: "#65ff5f", height: 60}}/>
                 </ScrollView>
                 {this._renderFixHeader()}
             </View>
@@ -561,7 +553,7 @@ export default class MovieComingScreen extends Component {
                 </View>
                 {/*分隔线*/}
                 <View style={{width: 0.5, alignSelf: 'stretch'}}>
-                    <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
+                    <View style={{height: 120, backgroundColor: '#939393', marginTop: 40}}/>
                 </View>
                 {/*图片*/}
                 <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
@@ -583,8 +575,8 @@ export default class MovieComingScreen extends Component {
     //电影解读
     _renderMovieAnalyse() {
         return (
-            <View style={{backgroundColor: "#ffffff",}}>
-                <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
+            <View style={{backgroundColor: "#ffffff", paddingBottom: 10}}>
+                <View style={{paddingHorizontal: 10,}}>
                     <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
                         <Text style={{flex: 1, color: '#474747', fontSize: 16}}>电影解读</Text>
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -593,9 +585,69 @@ export default class MovieComingScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                    <Image source={{uri: 'http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg'}}
+                           style={{width: 110, height: 82, marginRight: 10}}/>
+                    <View>
+                        <Text style={{color: '#333333', fontSize: 16}}>我是标题</Text>
+                        <Text style={{flex: 1, color: '#939393', fontSize: 15}}>我是摘要</Text>
+                        <Text style={{color: '#939393', fontSize: 14}}>2018-01-01</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
+
+    _renderMiniComment() {
+        return (
+            <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff", paddingBottom: 10}}>
+                <View style={{paddingHorizontal: 10,}}>
+                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>短评</Text>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                    <Image source={{uri: 'http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg'}}
+                           style={{width: 110, height: 82, marginRight: 10}}/>
+                    <View>
+                        <Text style={{color: '#333333', fontSize: 16}}>我是标题</Text>
+                        <Text style={{flex: 1, color: '#939393', fontSize: 15}}>我是摘要</Text>
+                        <Text style={{color: '#939393', fontSize: 14}}>2018-01-01</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    _renderPlusComment() {
+        return (
+            <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff", paddingBottom: 10}}>
+                <View style={{paddingHorizontal: 10,}}>
+                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>影评</Text>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                    <Image source={{uri: 'http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg'}}
+                           style={{width: 110, height: 82, marginRight: 10}}/>
+                    <View>
+                        <Text style={{color: '#333333', fontSize: 16}}>我是标题</Text>
+                        <Text style={{flex: 1, color: '#939393', fontSize: 15}}>我是摘要</Text>
+                        <Text style={{color: '#939393', fontSize: 14}}>2018-01-01</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
 
     _onPressBack = () => {
         this.props.navigation.dispatch(NavigationActions.back());
