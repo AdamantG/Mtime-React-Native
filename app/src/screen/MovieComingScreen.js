@@ -191,7 +191,7 @@ export default class MovieComingScreen extends Component {
                         style={{position: "absolute", left: 10,}}
                         onPress={this._onPressBack}
                     >
-                        <Image source={require('../image/ic_arrow.png')} style={styles.headerIcon}/>
+                        <Image source={require('../image/ic_arrow_left.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{position: "absolute", right: ICON_SIZE + 10 + 10,}}
@@ -424,10 +424,13 @@ export default class MovieComingScreen extends Component {
                                 alignItems: 'flex-start',
                                 padding: 5
                             }}><Text style={{color: '#474747', fontSize: 16}}>导演</Text></View>
-                            <Director director={director}/>
+                            <TouchableOpacity>
+                                <Director director={director}/>
+                            </TouchableOpacity>
                         </View>
-                        <View style={{width: 10, justifyContent: 'center', alignItems: 'flex-start'}}><View
-                            style={{width: 10, backgroundColor: '#939393', marginTop: 50}}/></View>
+                        <View style={{width: 0.5, alignSelf: 'stretch'}}>
+                            <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
+                        </View>
                         <View style={{padding: 5}}>
                             <View style={{
                                 height: 40,
@@ -441,22 +444,29 @@ export default class MovieComingScreen extends Component {
                                 {
                                     actors.map((actor, i) => {
                                         return (
-                                            <Actor key={i} actor={actor}/>
+                                            <TouchableOpacity key={i}>
+                                                <Actor actor={actor}/>
+                                            </TouchableOpacity>
                                         )
                                     })
                                 }
                             </View>
                         </View>
                     </View>
-
                 </ScrollView>
-                <View style={{
+                <TouchableOpacity style={{
                     position: "absolute",
                     top: 0,
                     right: 0,
+                    height: 50,
+                    paddingHorizontal: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}>
-                    <Text>全部</Text>
-                </View>
+                    <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                    <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                </TouchableOpacity>
             </View>
 
         );
