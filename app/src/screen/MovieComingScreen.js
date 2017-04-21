@@ -64,6 +64,8 @@ export default class MovieComingScreen extends Component {
                     {this._renderHeader()}
                     {this._renderStory()}
                     {this._renderDirectorActor()}
+                    {this._renderVideoImg()}
+                    {this._renderMovieAnalyse()}
                     <View style={{backgroundColor: "#eaff5d", height: 60}}/>
                     <View style={{backgroundColor: "#6ccfff", height: 60}}/>
                     <View style={{backgroundColor: "#65ff5f", height: 60}}/>
@@ -121,10 +123,23 @@ export default class MovieComingScreen extends Component {
                     bottom: 0,
                     flexDirection: 'row'
                 }}>
-                    <View style={[{backgroundColor: "#ffffff", marginLeft: 7}]}>
+                    {/*海报封面*/}
+                    <TouchableOpacity style={[{backgroundColor: "#ffffff", marginLeft: 7}]}>
                         <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
                                style={[{width: 100, height: 155, margin: 2}]}/>
-                    </View>
+                        <View style={{
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <Image source={require('../image/ic_video_play.png')} style={{width: 40, height: 40}}/>
+                        </View>
+                    </TouchableOpacity>
+                    {/*影片简介*/}
                     <View style={[{flexDirection: 'column', flex: 2.5, marginHorizontal: 5}]}>
                         <Text style={{fontSize: 16, color: '#ffffff'}}>{name}</Text>
                         <Text numberOfLines={1} style={{color: '#ffffff'}}>{nameEn}</Text>
@@ -146,6 +161,7 @@ export default class MovieComingScreen extends Component {
                             <Text numberOfLines={1} style={{color: '#ff8601', fontSize: 14,}}>{commentSpecial}</Text>
                         </View>
                     </View>
+                    {/*评分*/}
                     <View style={{
                         width: 43,
                         height: 43,
@@ -181,24 +197,28 @@ export default class MovieComingScreen extends Component {
         return (
             <Animated.View
                 style={[styles.header, {transform: [{translateY: title}],}]}>
+                {/*电影名称*/}
                 <Animated.View style={[styles.headerBackground, {opacity: opacity}]}>
                     <View style={styles.headerTitle}>
                         <View><Text style={styles.headerTitleText}>{name}</Text></View>
                     </View>
                 </Animated.View>
                 <View style={styles.headerTitle}>
+                    {/*返回*/}
                     <TouchableOpacity
                         style={{position: "absolute", left: 10,}}
                         onPress={this._onPressBack}
                     >
                         <Image source={require('../image/ic_arrow_left.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
+                    {/*收藏*/}
                     <TouchableOpacity
                         style={{position: "absolute", right: ICON_SIZE + 10 + 10,}}
                         onPress={this._onPressCollect}
                     >
                         <Image source={collectImg} style={styles.headerIcon}/>
                     </TouchableOpacity>
+                    {/*分享*/}
                     <TouchableOpacity
                         style={{position: "absolute", right: 10,}}
                         onPress={this._onPressShare}
@@ -226,7 +246,9 @@ export default class MovieComingScreen extends Component {
                 paddingRight: 10,
                 alignItems: 'center'
             }}>
+                {/*剧情简介*/}
                 <Text style={[storyStyle]}>剧情：{story}</Text>
+                {/*折叠&展开*/}
                 <TouchableOpacity onPress={() => {
                     this.setState({
                         storyExpanded: !this.state.storyExpanded
@@ -234,7 +256,6 @@ export default class MovieComingScreen extends Component {
                 }}>
                     <Image source={storyIcon} resizeMode={Image.resizeMode.center} style={{height: 20, margin: 5}}/>
                 </TouchableOpacity>
-
             </View>
         );
     }
@@ -417,6 +438,7 @@ export default class MovieComingScreen extends Component {
             }}>
                 <ScrollView horizontal={true}>
                     <View style={{flexDirection: 'row'}}>
+                        {/*导演*/}
                         <View style={{padding: 5}}>
                             <View style={{
                                 height: 40,
@@ -428,9 +450,11 @@ export default class MovieComingScreen extends Component {
                                 <Director director={director}/>
                             </TouchableOpacity>
                         </View>
+                        {/*分隔线*/}
                         <View style={{width: 0.5, alignSelf: 'stretch'}}>
                             <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
                         </View>
+                        {/*主要演员*/}
                         <View style={{padding: 5}}>
                             <View style={{
                                 height: 40,
@@ -468,7 +492,108 @@ export default class MovieComingScreen extends Component {
                     <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
                 </TouchableOpacity>
             </View>
+        );
+    }
 
+    //视频&图片
+    _renderVideoImg() {
+        // const actors = this.state.data.basic.actors;
+        // const director = this.state.data.basic.director;
+        const video = {
+            "count": 18,
+            "hightUrl": "https://vfx.mtime.cn/Video/2017/01/05/mp4/170105105137886980.mp4",
+            "img": "http://img5.mtime.cn/mg/2017/01/05/105124.57142324_235X132X4.jpg",
+            "title": "极限特工：终极回归 中国版预告片",
+            "url": "https://vfx.mtime.cn/Video/2017/01/05/mp4/170105105137886980_480.mp4",
+            "videoId": 64107
+        };
+        const stageImg = {
+            "count": 124,
+            "list": [
+                {
+                    "imgId": 7180661,
+                    "imgUrl": "http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg"
+                },
+                {
+                    "imgId": 7301637,
+                    "imgUrl": "http://img5.mtime.cn/pi/2016/11/02/174909.42908242_1280X720X2.jpg"
+                },
+                {
+                    "imgId": 7203067,
+                    "imgUrl": "http://img31.mtime.cn/pi/2016/04/07/160807.83892239_1280X720X2.jpg"
+                },
+                {
+                    "imgId": 7301211,
+                    "imgUrl": "http://img5.mtime.cn/pi/2016/11/01/091327.68190533_1280X720X2.jpg"
+                }
+            ]
+        };
+        return (
+            <View style={{
+                backgroundColor: "#ffffff",
+                marginTop: DEFAULT_MARGIN,
+                flexDirection: 'row'
+            }}>
+                {/*视频*/}
+                <View style={{flex: 1, paddingBottom: 10, paddingHorizontal: 10}}>
+                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>视频</Text>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={{color: '#939393', fontSize: 14}}>{video.count}</Text>
+                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity>
+                        <Image source={{uri: video.img}} style={{height: 120}}/>
+                        <View style={{
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <Image source={require('../image/ic_video_play.png')} style={{width: 40, height: 40}}/>
+                        </View>
+
+                    </TouchableOpacity>
+                </View>
+                {/*分隔线*/}
+                <View style={{width: 0.5, alignSelf: 'stretch'}}>
+                    <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
+                </View>
+                {/*图片*/}
+                <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
+                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>图片</Text>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={{color: '#939393', fontSize: 14}}>{stageImg.count}</Text>
+                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity >
+                        <Image source={{uri: stageImg.list[0].imgUrl}} style={{width: 120, height: 120}}/>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
+    }
+
+    //电影解读
+    _renderMovieAnalyse() {
+        return (
+            <View style={{backgroundColor: "#ffffff",}}>
+                <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
+                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>电影解读</Text>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
         );
     }
 
