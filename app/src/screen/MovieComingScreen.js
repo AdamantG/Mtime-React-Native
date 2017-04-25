@@ -9,6 +9,8 @@
 import React, {Component} from "react";
 import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {NavigationActions} from "react-navigation";
+import Director from "../component/Director";
+import Actor from "../component/Actor";
 
 const TITLE_HEIGHT = 50;
 const ICON_SIZE = 20;
@@ -19,10 +21,12 @@ export default class MovieComingScreen extends Component {
 
     state = {
         data: null,//json
+        dataFetched: false,//请求得到数据
         scrollY: new Animated.Value(0),//Y轴滑动距离
         collected: false,//顶部收藏
-        fetched: false,//请求得到数据
         storyExpanded: false,
+        comment: null,//评论
+        commentFetched: false,//请求得到数据
     };
 
     componentDidMount() {
@@ -33,15 +37,22 @@ export default class MovieComingScreen extends Component {
         } catch (error) {
         }
         let movieId = id > -1 ? id : 125805;
-        let url = 'https://ticket-api-m.mtime.cn/movie/detail.api?locationId=365&movieId=' + movieId;
-        console.log(movieId);
-        fetch(url)
+        fetch('https://ticket-api-m.mtime.cn/movie/detail.api?locationId=365&movieId=' + movieId)
             .then((response) => response.json())
             .then((responseData) => {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
-                    fetched: true,
+                    dataFetched: true,
                     data: responseData.data,
+                });
+            });
+        fetch('https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId=' + movieId)
+            .then((response) => response.json())
+            .then((responseData) => {
+                // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
+                this.setState({
+                    commentFetched: true,
+                    comment: responseData.data,
                 });
             });
     }
@@ -65,10 +76,10 @@ export default class MovieComingScreen extends Component {
                     {this._renderStory()}
                     {this._renderDirectorActor()}
                     {this._renderVideoImg()}
-                    {this._renderMovieAnalyse()}
+                    {this._renderMovieBox()}
                     {this._renderMiniComment()}
                     {this._renderPlusComment()}
-                    <View style={{backgroundColor: "#6ccfff", height: 60}}/>
+                    <View style={{height: DEFAULT_MARGIN}}/>
                 </ScrollView>
                 {this._renderFixHeader()}
             </View>
@@ -79,15 +90,15 @@ export default class MovieComingScreen extends Component {
     //详情卡片
     _renderHeader() {
         let img;
-        if (this.state.fetched) {
+        if (this.state.dataFetched) {
             img = this.state.data.basic.img;
         } else {
             img = '#949494';
         }
-        const name = this.state.fetched ? this.state.data.basic.name : '电影名称';
-        const nameEn = this.state.fetched ? this.state.data.basic.nameEn : 'Movie Name';
-        const mins = this.state.fetched ? this.state.data.basic.mins : '影片时长';
-        const typeArray = this.state.fetched ? this.state.data.basic.type : '影片类型';
+        const name = this.state.dataFetched ? this.state.data.basic.name : '电影名称';
+        const nameEn = this.state.dataFetched ? this.state.data.basic.nameEn : 'Movie Name';
+        const mins = this.state.dataFetched ? this.state.data.basic.mins : '影片时长';
+        const typeArray = this.state.dataFetched ? this.state.data.basic.type : '影片类型';
         let type = '';
         for (let i = 0; i < typeArray.length; i++) {
             type = type + typeArray[i];
@@ -95,10 +106,10 @@ export default class MovieComingScreen extends Component {
                 type = type + '/';
             }
         }
-        const releaseDate = this.state.fetched ? this.state.data.basic.releaseDate : '上映时间';
-        const releaseArea = this.state.fetched ? this.state.data.basic.releaseArea : '地区';
-        const commentSpecial = this.state.fetched ? this.state.data.basic.commentSpecial : '评价';
-        const rate = this.state.fetched ? this.state.data.basic.overallRating : '评分';
+        const releaseDate = this.state.dataFetched ? this.state.data.basic.releaseDate : '上映时间';
+        const releaseArea = this.state.dataFetched ? this.state.data.basic.releaseArea : '地区';
+        const commentSpecial = this.state.dataFetched ? this.state.data.basic.commentSpecial : '评价';
+        const rate = this.state.dataFetched ? this.state.data.basic.overallRating : '评分';
 
         return (
             <View style={{
@@ -185,7 +196,7 @@ export default class MovieComingScreen extends Component {
         });
         //收藏图标
         let collectImg = this.state.collected ? require('../image/ic_collect_selected.png') : require('../image/ic_collect_normal.png');
-        const name = this.state.fetched ? this.state.data.basic.name : '电影名称';
+        const name = this.state.dataFetched ? this.state.data.basic.name : '电影名称';
         return (
             <Animated.View
                 style={[styles.header, {transform: [{translateY: title}],}]}>
@@ -224,430 +235,354 @@ export default class MovieComingScreen extends Component {
 
     //剧情简介
     _renderStory() {
-
-        const story = this.state.fetched ? this.state.data.basic.story : '';
-        const storyStyle = this.state.storyExpanded ? styles.storyExpand : styles.storyCollapse;
-        const storyIcon = this.state.storyExpanded ? require('../image/ic_story_collapse.png') : require('../image/ic_story_expand.png');
-        return (
-            <View style={{
-                backgroundColor: "#ffffff",
-                marginTop: DEFAULT_MARGIN,
-                flexDirection: 'column',
-                paddingTop: 10,
-                paddingLeft: 10,
-                paddingRight: 10,
-                alignItems: 'center'
-            }}>
-                {/*剧情简介*/}
-                <Text style={[storyStyle]}>剧情：{story}</Text>
-                {/*折叠&展开*/}
-                <TouchableOpacity onPress={() => {
-                    this.setState({
-                        storyExpanded: !this.state.storyExpanded
-                    });
+        if (this.state.dataFetched) {
+            const story = this.state.data.basic.story;
+            const storyStyle = this.state.storyExpanded ? styles.storyExpand : styles.storyCollapse;
+            const storyIcon = this.state.storyExpanded ? require('../image/ic_story_collapse.png') : require('../image/ic_story_expand.png');
+            return (
+                <View style={{
+                    backgroundColor: "#ffffff",
+                    marginTop: DEFAULT_MARGIN,
+                    flexDirection: 'column',
+                    paddingTop: 10,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    alignItems: 'center'
                 }}>
-                    <Image source={storyIcon} resizeMode={Image.resizeMode.center} style={{height: 20, margin: 5}}/>
-                </TouchableOpacity>
-            </View>
-        );
+                    {/*剧情简介*/}
+                    <Text style={[storyStyle]}>剧情：{story}</Text>
+                    {/*折叠&展开*/}
+                    <TouchableOpacity onPress={() => {
+                        this.setState({
+                            storyExpanded: !this.state.storyExpanded
+                        });
+                    }}>
+                        <Image source={storyIcon} resizeMode={Image.resizeMode.center} style={{height: 20, margin: 5}}/>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
     }
 
     //导演&演员
     _renderDirectorActor() {
-        // const actors = this.state.data.basic.actors;
-        // const director = this.state.data.basic.director;
-        const director = {
-            "directorId": 903521,
-            "img": "http://img31.mtime.cn/ph/2016/09/02/144150.57291017_1280X720X2.jpg",
-            "name": "D·J·卡卢索",
-            "nameEn": "D.J. Caruso"
-        };
-        const actors = [
-            {
-                "actorId": 913378,
-                "img": "http://img31.mtime.cn/ph/2014/09/01/170748.64755972_1280X720X2.jpg",
-                "name": "范·迪塞尔",
-                "nameEn": "Vin Diesel",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145450.41310609.jpg",
-                "roleName": "多米尼克·托莱多"
-            },
-            {
-                "actorId": 912746,
-                "img": "http://img5.mtime.cn/ph/2016/12/16/113419.88212648_1280X720X2.jpg",
-                "name": "道恩·强森",
-                "nameEn": "Dwayne Johnson",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145502.47656575.jpg",
-                "roleName": "卢克·霍布斯"
-            },
-            {
-                "actorId": 923232,
-                "img": "http://img31.mtime.cn/ph/2014/08/06/135708.93055500_1280X720X2.jpg",
-                "name": "查理兹·塞隆",
-                "nameEn": "Charlize Theron",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145523.95072264.jpg",
-                "roleName": "塞弗"
-            },
-            {
-                "actorId": 912464,
-                "img": "http://img31.mtime.cn/ph/2014/03/17/100024.35937750_1280X720X2.jpg",
-                "name": "杰森·斯坦森",
-                "nameEn": "Jason Statham",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145514.14658869.jpg",
-                "roleName": "德卡特·肖"
-            },
-            {
-                "actorId": 937947,
-                "img": "http://img31.mtime.cn/ph/2014/03/14/153310.59934779_1280X720X2.jpg",
-                "name": "米歇尔·罗德里格兹",
-                "nameEn": "Michelle Rodriguez",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145606.29346955.jpg",
-                "roleName": "莱蒂"
-            },
-            {
-                "actorId": 1762245,
-                "img": "http://img31.mtime.cn/ph/2015/04/13/163248.27065805_1280X720X2.jpg",
-                "name": "娜塔莉·艾玛努埃尔",
-                "nameEn": "Nathalie Emmanuel",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145628.36166369.jpg",
-                "roleName": "拉姆齐"
-            },
-            {
-                "actorId": 901235,
-                "img": "http://img31.mtime.cn/ph/2015/04/27/162743.33568954_1280X720X2.jpg",
-                "name": "库尔特·拉塞尔",
-                "nameEn": "Kurt Russell",
-                "roleImg": "http://img5.mtime.cn/mg/2017/04/13/145547.43070490.jpg",
-                "roleName": "无名氏先生"
-            },
-            {
-                "actorId": 1264937,
-                "img": "http://img31.mtime.cn/ph/2014/05/01/161031.89864319_1280X720X2.jpg",
-                "name": "斯科特·伊斯特伍德",
-                "nameEn": "Scott Eastwood",
-                "roleImg": "",
-                "roleName": "小无名氏先生"
-            },
-            {
-                "actorId": 914213,
-                "img": "http://img31.mtime.cn/ph/2016/08/25/172352.92378397_1280X720X2.jpg",
-                "name": "泰瑞斯·吉布森",
-                "nameEn": "Tyrese Gibson",
-                "roleImg": "",
-                "roleName": "罗曼"
-            },
-            {
-                "actorId": 931076,
-                "img": "http://img31.mtime.cn/ph/2016/08/25/173424.86239571_1280X720X2.jpg",
-                "name": "卢达·克里斯",
-                "nameEn": "Ludacris",
-                "roleImg": "",
-                "roleName": "特佳"
-            },
-            {
-                "actorId": 936981,
-                "img": "http://img31.mtime.cn/ph/2014/03/14/153427.50328146_1280X720X2.jpg",
-                "name": "海伦·米伦",
-                "nameEn": "Helen Mirren",
-                "roleImg": "",
-                "roleName": "Magdalene Shaw       (uncredited)"
-            },
-            {
-                "actorId": 914501,
-                "img": "http://img31.mtime.cn/ph/2016/08/26/165754.93484957_1280X720X2.jpg",
-                "name": "埃尔莎·帕塔奇",
-                "nameEn": "Elsa Pataky",
-                "roleImg": "",
-                "roleName": "Elena"
-            },
-            {
-                "actorId": 1645713,
-                "img": "http://img31.mtime.cn/ph/2016/04/15/094031.35608362_1280X720X2.jpg",
-                "name": "卢克·伊万斯",
-                "nameEn": "Luke Evans",
-                "roleImg": "",
-                "roleName": "Owen"
-            },
-            {
-                "actorId": 1466328,
-                "img": "http://img5.mtime.cn/ph/2017/04/14/111553.21082716_1280X720X2.jpg",
-                "name": "克里斯托弗·海维尤",
-                "nameEn": "Kristofer Hivju",
-                "roleImg": "",
-                "roleName": "Rhodes"
-            },
-            {
-                "actorId": 2136738,
-                "img": "http://img5.mtime.cn/ph/2017/04/14/111920.71006196_1280X720X2.jpg",
-                "name": "艾登·艾斯特拉",
-                "nameEn": "Eden Estrella",
-                "roleImg": "",
-                "roleName": "Sam"
-            },
-            {
-                "actorId": 919056,
-                "img": "http://img5.mtime.cn/ph/2017/04/14/111730.81740493_1280X720X2.jpg",
-                "name": "",
-                "nameEn": "Celestin Cornielle",
-                "roleImg": "",
-                "roleName": "Raldo"
-            },
-            {
-                "actorId": 2207753,
-                "img": "http://img5.mtime.cn/ph/2017/04/14/111825.77444506_1280X720X2.jpg",
-                "name": "",
-                "nameEn": "Janmarco Santiago",
-                "roleImg": "",
-                "roleName": "Fernando"
-            },
-            {
-                "actorId": 2111414,
-                "img": "http://img31.mtime.cn/ph/2016/03/18/151902.31570214_1280X720X2.jpg",
-                "name": "",
-                "nameEn": "Marko Caka",
-                "roleImg": "",
-                "roleName": "Operative       (uncredited)"
-            },
-            {
-                "actorId": 2203565,
-                "img": "http://img31.mtime.cn/ph/2016/08/30/100330.15393071_1280X720X2.jpg",
-                "name": "",
-                "nameEn": "Ágúst Bjarnason",
-                "roleImg": "",
-                "roleName": "Lieutenant Branson       (uncredited)"
-            },
-            {
-                "actorId": 2205648,
-                "img": "http://img5.mtime.cn/ph/2017/04/13/172736.15043526_1280X720X2.jpg",
-                "name": "",
-                "nameEn": "Benjamin Donlow",
-                "roleImg": "",
-                "roleName": "Business Pedestrian       (uncredited)"
-            }];
-        return (
-            <View style={{
-                backgroundColor: "#ffffff",
-                marginTop: DEFAULT_MARGIN,
-            }}>
-                <ScrollView horizontal={true}>
-                    <View style={{flexDirection: 'row'}}>
-                        {/*导演*/}
-                        <View style={{padding: 5}}>
-                            <View style={{
-                                height: 40,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start',
-                                padding: 5
-                            }}><Text style={{color: '#474747', fontSize: 16}}>导演</Text></View>
-                            <TouchableOpacity>
-                                <Director director={director}/>
-                            </TouchableOpacity>
-                        </View>
-                        {/*分隔线*/}
-                        <View style={{width: 0.5, alignSelf: 'stretch'}}>
-                            <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
-                        </View>
-                        {/*主要演员*/}
-                        <View style={{padding: 5}}>
-                            <View style={{
-                                height: 40,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start',
-                                padding: 5
-                            }}><Text style={{color: '#474747', fontSize: 16}}>主要演员</Text></View>
-                            <View style={{
-                                flexDirection: 'row'
-                            }}>
-                                {
-                                    actors.map((actor, i) => {
-                                        return (
-                                            <TouchableOpacity key={i}>
-                                                <Actor actor={actor}/>
-                                            </TouchableOpacity>
-                                        )
-                                    })
-                                }
+        if (this.state.dataFetched) {
+            const actors = this.state.data.basic.actors;
+            const director = this.state.data.basic.director;
+            return (
+                <View style={{
+                    backgroundColor: "#ffffff",
+                    marginTop: DEFAULT_MARGIN,
+                }}>
+                    <ScrollView horizontal={true}>
+                        <View style={{flexDirection: 'row'}}>
+                            {/*导演*/}
+                            <View style={{padding: 5}}>
+                                <View style={{
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                    padding: 5
+                                }}><Text style={{color: '#474747', fontSize: 14}}>导演</Text></View>
+                                <TouchableOpacity>
+                                    <Director director={director}/>
+                                </TouchableOpacity>
+                            </View>
+                            {/*分隔线*/}
+                            <View style={{width: 0.5, alignSelf: 'stretch'}}>
+                                <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
+                            </View>
+                            {/*主要演员*/}
+                            <View style={{padding: 5}}>
+                                <View style={{
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                    padding: 5
+                                }}><Text style={{color: '#474747', fontSize: 14}}>主要演员</Text></View>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    {
+                                        actors.map((actor, i) => {
+                                            return (
+                                                <TouchableOpacity key={i}>
+                                                    <Actor actor={actor}/>
+                                                </TouchableOpacity>
+                                            )
+                                        })
+                                    }
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </ScrollView>
-                <TouchableOpacity style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    height: 50,
-                    paddingHorizontal: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                    <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
-                    <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
-                </TouchableOpacity>
-            </View>
-        );
+                    </ScrollView>
+                    <TouchableOpacity style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        height: 50,
+                        paddingHorizontal: 10,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                        <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
     }
 
     //视频&图片
     _renderVideoImg() {
-        // const actors = this.state.data.basic.actors;
-        // const director = this.state.data.basic.director;
-        const video = {
-            "count": 18,
-            "hightUrl": "https://vfx.mtime.cn/Video/2017/01/05/mp4/170105105137886980.mp4",
-            "img": "http://img5.mtime.cn/mg/2017/01/05/105124.57142324_235X132X4.jpg",
-            "title": "极限特工：终极回归 中国版预告片",
-            "url": "https://vfx.mtime.cn/Video/2017/01/05/mp4/170105105137886980_480.mp4",
-            "videoId": 64107
-        };
-        const stageImg = {
-            "count": 124,
-            "list": [
-                {
-                    "imgId": 7180661,
-                    "imgUrl": "http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg"
-                },
-                {
-                    "imgId": 7301637,
-                    "imgUrl": "http://img5.mtime.cn/pi/2016/11/02/174909.42908242_1280X720X2.jpg"
-                },
-                {
-                    "imgId": 7203067,
-                    "imgUrl": "http://img31.mtime.cn/pi/2016/04/07/160807.83892239_1280X720X2.jpg"
-                },
-                {
-                    "imgId": 7301211,
-                    "imgUrl": "http://img5.mtime.cn/pi/2016/11/01/091327.68190533_1280X720X2.jpg"
-                }
-            ]
-        };
-        return (
-            <View style={{
-                backgroundColor: "#ffffff",
-                marginTop: DEFAULT_MARGIN,
-                flexDirection: 'row'
-            }}>
-                {/*视频*/}
-                <View style={{flex: 1, paddingBottom: 10, paddingHorizontal: 10}}>
-                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
-                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>视频</Text>
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{color: '#939393', fontSize: 14}}>{video.count}</Text>
-                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
-                        </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity>
-                        <Image source={{uri: video.img}} style={{height: 120}}/>
-                        <View style={{
-                            position: "absolute",
-                            left: 0,
-                            top: 0,
-                            right: 0,
-                            bottom: 0,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <Image source={require('../image/ic_video_play.png')} style={{width: 40, height: 40}}/>
+        if (this.state.dataFetched) {
+            const video = this.state.data.basic.video;
+            const stageImg = this.state.data.basic.stageImg;
+            return (
+                <View style={{
+                    backgroundColor: "#ffffff",
+                    marginTop: DEFAULT_MARGIN,
+                    flexDirection: 'row'
+                }}>
+                    {/*视频*/}
+                    <View style={{flex: 1, paddingBottom: 10, paddingHorizontal: 10}}>
+                        <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                            <Text style={{flex: 1, color: '#474747', fontSize: 14}}>视频</Text>
+                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={{color: '#939393', fontSize: 14}}>{video.count}</Text>
+                                <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                            </TouchableOpacity>
                         </View>
+                        <TouchableOpacity>
+                            <Image source={{uri: video.img}} style={{height: 120}}/>
+                            <View style={{
+                                position: "absolute",
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Image source={require('../image/ic_video_play.png')} style={{width: 40, height: 40}}/>
+                            </View>
 
-                    </TouchableOpacity>
-                </View>
-                {/*分隔线*/}
-                <View style={{width: 0.5, alignSelf: 'stretch'}}>
-                    <View style={{height: 120, backgroundColor: '#939393', marginTop: 40}}/>
-                </View>
-                {/*图片*/}
-                <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
-                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
-                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>图片</Text>
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{color: '#939393', fontSize: 14}}>{stageImg.count}</Text>
-                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity >
-                        <Image source={{uri: stageImg.list[0].imgUrl}} style={{width: 120, height: 120}}/>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    }
-
-    //电影解读
-    _renderMovieAnalyse() {
-        return (
-            <View style={{backgroundColor: "#ffffff", paddingBottom: 10}}>
-                <View style={{paddingHorizontal: 10,}}>
-                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
-                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>电影解读</Text>
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
-                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                    {/*分隔线*/}
+                    <View style={{width: 0.5, alignSelf: 'stretch'}}>
+                        <View style={{height: 120, backgroundColor: '#939393', marginTop: 40}}/>
+                    </View>
+                    {/*图片*/}
+                    <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
+                        <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                            <Text style={{flex: 1, color: '#474747', fontSize: 14}}>图片</Text>
+                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={{color: '#939393', fontSize: 14}}>{stageImg.count}</Text>
+                                <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity >
+                            <Image source={{uri: stageImg.list[0].imgUrl}} style={{width: 120, height: 120}}/>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
-                    <Image source={{uri: 'http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg'}}
-                           style={{width: 110, height: 82, marginRight: 10}}/>
-                    <View>
-                        <Text style={{color: '#333333', fontSize: 16}}>我是标题</Text>
-                        <Text style={{flex: 1, color: '#939393', fontSize: 15}}>我是摘要</Text>
-                        <Text style={{color: '#939393', fontSize: 14}}>2018-01-01</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        );
+            );
+        }
     }
 
+    //电影票房
+    _renderMovieBox() {
+        if (this.state.dataFetched) {
+            const boxOffice = this.state.data.boxOffice;
+            return (
+                <View style={{
+                    flexDirection: 'row',
+                    backgroundColor: "#ffffff",
+                    marginTop: DEFAULT_MARGIN,
+                    paddingVertical: 10
+                }}>
+                    <View style={{flex: 1, justifyContentL: 'center', alignItems: 'center'}}>
+                        <Text style={{color: '#ff8601', fontSize: 14}}>{boxOffice.ranking}</Text>
+                        <Text style={{color: '#939393', fontSize: 12}}>票房排名</Text>
+                    </View>
+                    <View style={{flex: 1, justifyContentL: 'center', alignItems: 'center'}}>
+                        <Text style={{color: '#ff8601', fontSize: 14}}>{boxOffice.todayBoxDes}</Text>
+                        <Text style={{color: '#939393', fontSize: 12}}>今日实时(万)</Text>
+                    </View>
+                    <View style={{flex: 1, justifyContentL: 'center', alignItems: 'center'}}>
+                        <Text style={{color: '#ff8601', fontSize: 14}}>{boxOffice.totalBoxDes}</Text>
+                        <Text style={{color: '#939393', fontSize: 12}}>累计票房(亿)</Text>
+                    </View>
+
+                </View>
+            );
+        }
+
+    }
+
+    //短评
     _renderMiniComment() {
-        return (
-            <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff", paddingBottom: 10}}>
-                <View style={{paddingHorizontal: 10,}}>
-                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
-                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>短评</Text>
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
-                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
-                        </TouchableOpacity>
+        if (this.state.commentFetched) {
+            const mini = this.state.comment.mini;
+            return (
+                <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff"}}>
+                    <View style={{paddingHorizontal: 10,}}>
+                        <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                            <Text style={{flex: 1, color: '#474747', fontSize: 14}}>短评</Text>
+                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                                <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                            </TouchableOpacity>
+                        </View>
                     </View>
+                    <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                        {/*头像*/}
+                        <Image source={{uri: mini.list[0].headImg}}
+                               style={{width: 40, height: 40, marginRight: 10, borderRadius: 20}}/>
+                        <View style={{flex: 1}}>
+                            <View style={{flexDirection: 'row'}}>
+                                {/*昵称*/}
+                                <Text style={{flex: 1, color: '#939393', fontSize: 14}}>{mini.list[0].nickname}</Text>
+                                {/*评分*/}
+                                <Text style={{color: '#639e02', fontSize: 14}}>评{mini.list[0].rating}</Text>
+                            </View>
+                            {/*评论内容*/}
+                            <Text style={{
+                                color: '#333333',
+                                fontSize: 14,
+                                paddingVertical: 10
+                            }}>{mini.list[0].content}</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                {/*日期*/}
+                                <Text style={{
+                                    flex: 1,
+                                    color: '#939393',
+                                    fontSize: 14
+                                }}>{this.formatDate(new Date(mini.list[0].commentDate * 1000))}</Text>
+                                <TouchableOpacity
+                                    style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Image source={require('../image/ic_reply.png')} style={{width: 16, height: 16}}/>
+                                    <Text style={{color: '#939393', fontSize: 12, marginHorizontal: 10}}>回复</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Image source={require('../image/ic_like.png')} style={{width: 16, height: 16}}/>
+                                    <Text style={{color: '#939393', fontSize: 12, marginLeft: 10}}>赞</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <View style={{height: 0.5, backgroundColor: '#939393', margin: 10}}/>
+                    <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                        {/*头像*/}
+                        <Image source={{uri: mini.list[1].headImg}}
+                               style={{width: 40, height: 40, marginRight: 10, borderRadius: 20}}/>
+                        <View style={{flex: 1}}>
+                            <View style={{flexDirection: 'row'}}>
+                                {/*昵称*/}
+                                <Text style={{flex: 1, color: '#939393', fontSize: 14}}>{mini.list[1].nickname}</Text>
+                                {/*评分*/}
+                                <Text style={{color: '#639e02', fontSize: 14}}>评{mini.list[1].rating}</Text>
+                            </View>
+                            {/*评论内容*/}
+                            <Text style={{
+                                color: '#333333',
+                                fontSize: 14,
+                                paddingVertical: 10
+                            }}>{mini.list[1].content}</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                {/*日期*/}
+                                <Text style={{
+                                    flex: 1,
+                                    color: '#939393',
+                                    fontSize: 14
+                                }}>{this.formatDate(new Date(mini.list[1].commentDate * 1000))}</Text>
+                                <TouchableOpacity
+                                    style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Image source={require('../image/ic_reply.png')} style={{width: 16, height: 16}}/>
+                                    <Text style={{color: '#939393', fontSize: 12, marginHorizontal: 10}}>回复</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Image source={require('../image/ic_like.png')} style={{width: 16, height: 16}}/>
+                                    <Text style={{color: '#939393', fontSize: 12, marginLeft: 10}}>赞</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <View style={{height: 0.5, backgroundColor: '#939393', margin: 10}}/>
+                    <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',}}>
+                        <Text style={{color: '#ff8601', fontSize: 14, marginBottom: 10}}>查看更多{mini.total}条评论</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
-                    <Image source={{uri: 'http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg'}}
-                           style={{width: 110, height: 82, marginRight: 10}}/>
-                    <View>
-                        <Text style={{color: '#333333', fontSize: 16}}>我是标题</Text>
-                        <Text style={{flex: 1, color: '#939393', fontSize: 15}}>我是摘要</Text>
-                        <Text style={{color: '#939393', fontSize: 14}}>2018-01-01</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        );
+            );
+        }
+
     }
 
+    /**
+     * 时间戳转日期
+     * @param commentDate
+     */
+    formatDate(commentDate) {
+        // return commentDate.toLocaleString();
+        const year = commentDate.getYear();
+        const month = commentDate.getMonth() + 1;
+        const date = commentDate.getDate();
+        const hour = commentDate.getHours();
+        const minute = commentDate.getMinutes();
+        const second = commentDate.getSeconds();
+        return "20" + (year - 100) + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+    }
+
+    //影评（长评）
     _renderPlusComment() {
-        return (
-            <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff", paddingBottom: 10}}>
-                <View style={{paddingHorizontal: 10,}}>
-                    <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
-                        <Text style={{flex: 1, color: '#474747', fontSize: 16}}>影评</Text>
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
-                            <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
-                        </TouchableOpacity>
+        if (this.state.commentFetched) {
+            const plus = this.state.comment.plus;
+            return (
+                <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff"}}>
+                    <View style={{paddingHorizontal: 10,}}>
+                        <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
+                            <Text style={{flex: 1, color: '#474747', fontSize: 14}}>影评</Text>
+                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
+                                <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
+                            </TouchableOpacity>
+                        </View>
                     </View>
+                    <TouchableOpacity style={{paddingHorizontal: 10}}>
+                        {/*标题*/}
+                        <Text style={{color: '#333333', fontSize: 14}}>{plus.list[0].title}</Text>
+                        <View style={{flexDirection: 'row', paddingVertical: 10, alignItems: 'center'}}>
+                            {/*头像*/}
+                            <Image source={{uri: plus.list[0].headImg}}
+                                   style={{width: 20, height: 20, borderRadius: 10}}/>
+                            {/*昵称*/}
+                            <Text style={{
+                                color: '#939393',
+                                paddingHorizontal: 3,
+                                fontSize: 12
+                            }}>{plus.list[0].nickname}</Text>
+                            {/*评分*/}
+                            <Text
+                                style={{color: '#639e02', paddingRight: 3, fontSize: 12}}>评{plus.list[0].rating}分</Text>
+                            <Text style={{color: '#939393', paddingHorizontal: 3, fontSize: 12}}>|</Text>
+                            {/*评论数目*/}
+                            <Text
+                                style={{color: '#939393', paddingHorizontal: 3, fontSize: 12}}>{plus.list[0].replyCount}评论</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <View style={{height: 0.5, backgroundColor: '#939393', marginHorizontal: 10, marginBottom: 10}}/>
+                    <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',}}>
+                        <Text style={{color: '#ff8601', fontSize: 14, marginBottom: 10}}>查看更多{plus.total}条影评</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
-                    <Image source={{uri: 'http://img31.mtime.cn/pi/2016/04/06/163644.66635601_1280X720X2.jpg'}}
-                           style={{width: 110, height: 82, marginRight: 10}}/>
-                    <View>
-                        <Text style={{color: '#333333', fontSize: 16}}>我是标题</Text>
-                        <Text style={{flex: 1, color: '#939393', fontSize: 15}}>我是摘要</Text>
-                        <Text style={{color: '#939393', fontSize: 14}}>2018-01-01</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+            );
+        }
 
+    }
 
     _onPressBack = () => {
         this.props.navigation.dispatch(NavigationActions.back());
@@ -662,55 +597,6 @@ export default class MovieComingScreen extends Component {
     _onPressShare = () => {
 
     };
-}
-
-class Director extends Component {
-    render() {
-        const director = this.props.director;
-        const img = director.img;
-        const name = director.name;
-        const nameEn = director.nameEn;
-        return (
-            <View style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: 5
-            }}>
-                <Image source={{uri: img}} style={{width: 100, height: 100, marginBottom: 5}}/>
-                <Text numberOfLines={1}
-                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{name}</Text>
-                <Text numberOfLines={1}
-                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{nameEn}</Text>
-            </View>
-        );
-
-    }
-}
-
-class Actor extends Component {
-    render() {
-        const actor = this.props.actor;
-        const img = actor.img;
-        const name = actor.name;
-        const nameEn = actor.nameEn;
-        const roleName = actor.roleName;
-        return (
-            <View style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: 5
-            }}>
-                <Image source={{uri: img}} style={{width: 100, height: 100, marginBottom: 5}}/>
-                <Text numberOfLines={1}
-                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{name}</Text>
-                <Text numberOfLines={1}
-                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>{nameEn}</Text>
-                <Text numberOfLines={1}
-                      style={[styles.textNormal, {width: 100, textAlign: 'center', fontSize: 12}]}>饰:{roleName}</Text>
-            </View>
-        );
-
-    }
 }
 
 const styles = StyleSheet.create({
