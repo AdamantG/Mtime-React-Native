@@ -11,10 +11,11 @@ import {StackNavigator, TabNavigator} from "react-navigation";
 import {AppRegistry} from "react-native";
 import MovieComingScreen from "./screen/MovieComingScreen";
 import MovieShowScreen from "./screen/MovieShowScreen";
+import VideoListScreen from "./screen/VideoListScreen";
 
 const TabScreen = TabNavigator({
 
-    即将上映: {screen: MovieComingScreen},
+    即将上映: {screen: MovieShowScreen},
     正在热映: {screen: MovieShowScreen},
     }, {
         tabBarPosition: 'top',
@@ -42,7 +43,8 @@ TabScreen.navigationOptions = {
 
 const stack = StackNavigator({
     Home: {screen: TabScreen},
-    Detail: {screen: MovieComingScreen}
+    Detail: {screen: MovieComingScreen},
+    VideoList: {screen: VideoListScreen}
 }, {
     headerMode: 'none',
 });

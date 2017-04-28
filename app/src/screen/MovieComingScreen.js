@@ -7,10 +7,11 @@
 'use strict';
 
 import React, {Component} from "react";
-import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Animated, Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {NavigationActions} from "react-navigation";
 import Director from "../component/Director";
 import Actor from "../component/Actor";
+import {styles} from "../style/Styles";
 
 const TITLE_HEIGHT = 50;
 const ICON_SIZE = 20;
@@ -30,9 +31,11 @@ export default class MovieComingScreen extends Component {
     };
 
     componentDidMount() {
+
         let id = -1;
         try {
-            const params = this.props.navigation.state.params;
+            const navigation = this.props.navigation;
+            const params = navigation.state.params;
             id = params.movieId;
         } catch (error) {
         }
@@ -58,6 +61,7 @@ export default class MovieComingScreen extends Component {
     }
 
     render() {
+
         return (
             <View style={{
                 flex: 1,
@@ -127,7 +131,8 @@ export default class MovieComingScreen extends Component {
                     flexDirection: 'row'
                 }}>
                     {/*海报封面*/}
-                    <TouchableOpacity style={[{backgroundColor: "#ffffff", marginLeft: 7}]}>
+                    <TouchableOpacity style={[{backgroundColor: "#ffffff", marginLeft: 7}]}
+                                      onPress={this._onPressVideo}>
                         <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
                                style={[{width: 100, height: 155, margin: 2}]}/>
                         <View style={{
@@ -346,15 +351,16 @@ export default class MovieComingScreen extends Component {
                     flexDirection: 'row'
                 }}>
                     {/*视频*/}
-                    <View style={{flex: 1, paddingBottom: 10, paddingHorizontal: 10}}>
+                    <TouchableOpacity style={{flex: 1, paddingBottom: 10, paddingHorizontal: 10}}
+                                      onPress={this._onPressVideo}>
                         <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
                             <Text style={{flex: 1, color: '#474747', fontSize: 14}}>视频</Text>
-                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: '#939393', fontSize: 14}}>{video.count}</Text>
                                 <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
-                            </TouchableOpacity>
+                            </View>
                         </View>
-                        <TouchableOpacity>
+                        <View>
                             <Image source={{uri: video.img}} style={{height: 120}}/>
                             <View style={{
                                 position: "absolute",
@@ -368,8 +374,8 @@ export default class MovieComingScreen extends Component {
                                 <Image source={require('../image/ic_video_play.png')} style={{width: 40, height: 40}}/>
                             </View>
 
-                        </TouchableOpacity>
-                    </View>
+                        </View>
+                    </TouchableOpacity>
                     {/*分隔线*/}
                     <View style={{width: 0.5, alignSelf: 'stretch'}}>
                         <View style={{height: 120, backgroundColor: '#939393', marginTop: 40}}/>
@@ -403,15 +409,15 @@ export default class MovieComingScreen extends Component {
                     marginTop: DEFAULT_MARGIN,
                     paddingVertical: 10
                 }}>
-                    <View style={{flex: 1, justifyContentL: 'center', alignItems: 'center'}}>
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style={{color: '#ff8601', fontSize: 14}}>{boxOffice.ranking}</Text>
                         <Text style={{color: '#939393', fontSize: 12}}>票房排名</Text>
                     </View>
-                    <View style={{flex: 1, justifyContentL: 'center', alignItems: 'center'}}>
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style={{color: '#ff8601', fontSize: 14}}>{boxOffice.todayBoxDes}</Text>
                         <Text style={{color: '#939393', fontSize: 12}}>今日实时(万)</Text>
                     </View>
-                    <View style={{flex: 1, justifyContentL: 'center', alignItems: 'center'}}>
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style={{color: '#ff8601', fontSize: 14}}>{boxOffice.totalBoxDes}</Text>
                         <Text style={{color: '#939393', fontSize: 12}}>累计票房(亿)</Text>
                     </View>
@@ -527,7 +533,6 @@ export default class MovieComingScreen extends Component {
      * @param commentDate
      */
     formatDate(commentDate) {
-        // return commentDate.toLocaleString();
         const year = commentDate.getYear();
         const month = commentDate.getMonth() + 1;
         const date = commentDate.getDate();
@@ -585,7 +590,9 @@ export default class MovieComingScreen extends Component {
     }
 
     _onPressBack = () => {
-        this.props.navigation.dispatch(NavigationActions.back());
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        navigation.dispatch(NavigationActions.back());
     };
 
     _onPressCollect = () => {
@@ -597,51 +604,10 @@ export default class MovieComingScreen extends Component {
     _onPressShare = () => {
 
     };
-}
 
-const styles = StyleSheet.create({
-    header: {
-        position: "absolute",
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        height: TITLE_HEIGHT,
-    },
-    headerTitle: {
-        position: "absolute",
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    headerTitleText: {
-        color: 'white',
-        fontSize: 18,
-    },
-    headerBackground: {
-        backgroundColor: "#1d2635",
-        height: TITLE_HEIGHT
-    },
-    headerIcon: {
-        width: ICON_SIZE,
-        height: ICON_SIZE,
-    },
-    storyExpand: {
-        color: '#333333',
-        fontSize: 14,
-        lineHeight: 22,
-    },
-    storyCollapse: {
-        color: '#333333',
-        fontSize: 14,
-        height: 40,
-        lineHeight: 22,
-    },
-    textNormal: {
-        color: '#333333',
-        fontSize: 14,
-    },
-});
+    _onPressVideo = () => {
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        navigation.navigate('VideoList', {movieId: params.movieId});
+    };
+}
