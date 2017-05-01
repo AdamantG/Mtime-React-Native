@@ -12,6 +12,7 @@ import {AppRegistry} from "react-native";
 import MovieComingScreen from "./screen/MovieComingScreen";
 import MovieShowScreen from "./screen/MovieShowScreen";
 import VideoListScreen from "./screen/VideoListScreen";
+import MovieDetailScreen from "./screen/MovieDetailScreen";
 
 const TabScreen = TabNavigator({
 
@@ -43,11 +44,10 @@ TabScreen.navigationOptions = {
 
 const stack = StackNavigator({
     Home: {screen: TabScreen},
-    Detail: {screen: MovieComingScreen},
+    Detail: {screen: MovieDetailScreen},
     VideoList: {screen: VideoListScreen}
 }, {
     headerMode: 'none',
 });
-
 
 AppRegistry.registerComponent('app', () => stack);

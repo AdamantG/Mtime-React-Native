@@ -19,7 +19,7 @@ export default class MovieShowScreen extends Component {
     state = {
         data: [],
         refresh: false
-    }
+    };
 
     componentDidMount() {
         this.fetchShowMovies();
