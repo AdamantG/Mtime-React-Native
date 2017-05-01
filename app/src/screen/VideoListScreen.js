@@ -14,7 +14,6 @@ import VideoItem from "../component/VideoItem";
 import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
 
-const TITLE_HEIGHT = 50;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export default class VideoListScreen extends Component {
@@ -26,16 +25,17 @@ export default class VideoListScreen extends Component {
     };
 
     componentDidMount() {
-        this.fetchShowMovies();
+        this.fetchVideos();
     }
 
-    fetchShowMovies() {
+    fetchVideos() {
 
         const navigation = this.props.navigation;
         const params = navigation.state.params;
         const movieId = params.movieId;
 
         this.setState({
+            pageIndex: 1,
             refresh: true,
         });
         fetch('https://api-m.mtime.cn/Movie/Video.api?pageIndex=' + this.state.pageIndex + '&movieId=' + movieId)
@@ -51,6 +51,31 @@ export default class VideoListScreen extends Component {
                 this.setState({
                     refresh: false,
                 });
+            });
+    }
+
+    loadMoreVideos() {
+
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        const movieId = params.movieId;
+
+        //如果当前页数>=总页数，则不加载
+        if (this.state.pageIndex >= this.state.data.totalPageCount) {
+            return
+        }
+
+        fetch('https://api-m.mtime.cn/Movie/Video.api?pageIndex=' + (this.state.pageIndex + 1) + '&movieId=' + movieId)
+            .then((response) => response.json())
+            .then((responseData) => {
+                // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
+                this.setState({
+                    data: responseData,
+                    pageIndex: this.state.pageIndex + 1,
+                });
+            })
+            .catch((error) => {
+
             });
     }
 
@@ -84,8 +109,12 @@ export default class VideoListScreen extends Component {
                     )}
                     refreshing={this.state.refresh}
                     onRefresh={() => {
-                        this.fetchShowMovies()
+                        this.fetchVideos()
                     }}
+                    onEndReached={() => {
+                        this.loadMoreVideos();
+                    }}
+                    onEndReachedThreshold={50}
                     ItemSeparatorComponent={ItemSeparator}
                     ListFooterComponent={ListFooter}
                 />
@@ -96,7 +125,7 @@ export default class VideoListScreen extends Component {
 
     _onPressBack = () => {
         const navigation = this.props.navigation;
-        const params = navigation.state.params;
+        // const params = navigation.state.params;
         navigation.dispatch(NavigationActions.back());
     };
 }

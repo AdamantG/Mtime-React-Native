@@ -67,7 +67,8 @@ export default class VideoItem extends Component {
 
     _onPressToVideoPlay = () => {
         const video = this.props.video.item;
-        const movieId = movie.id;
+        const url = video.url;
+        const hightUrl = video.hightUrl;
         this.props.navigation.navigate('Detail', {movieId: movieId});
     };
 }
