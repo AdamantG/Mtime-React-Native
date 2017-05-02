@@ -48,7 +48,7 @@ export default class MovieShowScreen extends Component {
     render() {
         return (
             <AnimatedFlatList
-                data={this.state.data}
+                data={this.state.videoList}
                 renderItem={(item) => {
                     return (<ShowItem movie={item} navigation={this.props.navigation}/>);
                 }}
