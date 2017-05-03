@@ -16,25 +16,16 @@ import ListFooter from "../component/ListFooter";
 
 export default class VideoPlayScreen extends Component {
 
-    componentDidMount() {
-        this.fetchVideos();
-    }
-
     render() {
-
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        const video = params.video;
+        const url = video.url;
+        const hightUrl = video.hightUrl;
 
         return (
             <View>
-                <View style={[styles.headerBackground, {justifyContent: 'center'}]}>
-                    {/*返回*/}
-                    <TouchableOpacity
-                        style={{position: "absolute", left: 10,}}
-                        onPress={this._onPressBack}
-                    >
-                        <Image source={require('../image/ic_arrow_left.png')} style={styles.headerIcon}/>
-                    </TouchableOpacity>
 
-                </View>
             </View>
 
         );

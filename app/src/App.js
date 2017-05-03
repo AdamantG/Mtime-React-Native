@@ -13,6 +13,7 @@ import MovieComingScreen from "./screen/MovieComingScreen";
 import MovieShowScreen from "./screen/MovieShowScreen";
 import VideoListScreen from "./screen/VideoListScreen";
 import MovieDetailScreen from "./screen/MovieDetailScreen";
+import VideoPlayScreen from "./screen/VideoPlayScreen";
 
 const TabScreen = TabNavigator({
 
@@ -43,9 +44,10 @@ TabScreen.navigationOptions = {
 };
 
 const stack = StackNavigator({
-    Home: {screen: TabScreen},
-    Detail: {screen: MovieDetailScreen},
-    VideoList: {screen: VideoListScreen}
+    Home: {screen: TabScreen},          //主页
+    Detail: {screen: MovieDetailScreen},//电影详情
+    VideoList: {screen: VideoListScreen},//视频列表
+    VideoPlay: {screen: VideoPlayScreen},//视频播放
 }, {
     headerMode: 'none',
 });
