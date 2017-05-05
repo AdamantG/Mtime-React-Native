@@ -13,6 +13,7 @@ import {styles} from "../style/Styles";
 import VideoItem from "../component/VideoItem";
 import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
+import Video from "react-native-video";
 
 export default class VideoPlayScreen extends Component {
 
@@ -24,7 +25,21 @@ export default class VideoPlayScreen extends Component {
         const hightUrl = video.hightUrl;
 
         return (
-            <View>
+            <View style={{
+                flex: 1
+            }}>
+                <Video source={{uri: url}}   // Can be a URL or a local file.
+                       resizeMode="contain"                      // Fill the whole screen at aspect ratio.*
+                       repeat={true}                           // Repeat forever.
+                       playInBackground={false}
+                       style={{
+                           position: 'absolute',
+                           top: 0,
+                           left: 0,
+                           bottom: 0,
+                           right: 0,
+                       }}
+                />
 
             </View>
 
