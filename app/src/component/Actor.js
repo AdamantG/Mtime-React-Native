@@ -9,6 +9,7 @@
 import React, {Component} from "react";
 import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {NavigationActions} from "react-navigation";
+import {styles} from "../style/Styles";
 
 export default class Actor extends Component {
     render() {
@@ -35,10 +36,3 @@ export default class Actor extends Component {
 
     }
 }
-
-const styles = StyleSheet.create({
-    textNormal: {
-        color: '#333333',
-        fontSize: 14,
-    },
-});

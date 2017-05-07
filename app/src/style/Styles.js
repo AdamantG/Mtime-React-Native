@@ -12,6 +12,55 @@ const HEADER_HEIGHT = 250;
 const DEFAULT_MARGIN = 20;
 
 export const styles = StyleSheet.create({
+    container: {
+        padding: 10,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+    },
+    img: {
+        width: 80,
+        height: 123,
+        backgroundColor: '#949494'
+    },
+    detail: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        alignSelf: 'stretch',
+        marginLeft: 10,
+    },
+    detail_title: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    text_title: {
+        color: '#333333',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    text_rank: {
+        color: '#5d8a1c',
+        fontStyle: 'italic',
+        fontWeight: 'bold'
+    },
+    text_special: {
+        color: '#ff8601',
+        fontSize: 15,
+    },
+    text_date_cinema: {
+        color: '#999999',
+        fontSize: 12,
+    },
+    text_version: {
+        fontSize: 12,
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 5,
+        marginHorizontal: 2,
+        textAlign: 'center',
+    },
     header: {
         position: "absolute",
         left: 0,
@@ -55,5 +104,15 @@ export const styles = StyleSheet.create({
     textNormal: {
         color: '#333333',
         fontSize: 14,
+    },
+    textFooter: {
+        flex: 1,
+        fontSize: 12,
+        textAlign: 'center',
+        margin: 10,
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'gray',
     },
 });

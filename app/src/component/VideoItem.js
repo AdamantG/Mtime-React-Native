@@ -8,12 +8,16 @@
 
 import React, {Component} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {styles} from "../style/Styles";
 
 export default class VideoItem extends Component {
 
     render() {
         const video = this.props.video.item;
         const image = video.image;//视频图片
+        if (image.toString() == "") {
+            return (<View/>);
+        }
         const title = video.title;//预告片名称
         const length = video.length;//预告片时长
 
@@ -70,54 +74,3 @@ export default class VideoItem extends Component {
         this.props.navigation.navigate('VideoPlay', {video: video});
     };
 }
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#ffffff',
-    },
-    img: {
-        width: 80,
-        height: 123,
-    },
-    detail: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        alignSelf: 'stretch',
-        marginLeft: 10,
-    },
-    detail_title: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    text_title: {
-        color: '#333333',
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
-    text_rank: {
-        color: '#5d8a1c',
-        fontStyle: 'italic',
-        fontWeight: 'bold'
-    },
-    text_special: {
-        color: '#ff8601',
-        fontSize: 15,
-    },
-    text_date_cinema: {
-        color: '#999999',
-        fontSize: 12,
-    },
-    text_version: {
-        fontSize: 12,
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 5,
-        marginHorizontal: 2,
-        textAlign: 'center',
-    },
-});
