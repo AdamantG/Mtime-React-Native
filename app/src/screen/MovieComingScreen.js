@@ -46,7 +46,7 @@ export default class MovieComingScreen extends Component {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
                     dataFetched: true,
-                    data: responseData.videoList,
+                    data: responseData.data,
                 });
             });
         fetch('https://ticket-api-m.mtime.cn/movie/hotComment.api?movieId=' + movieId)
@@ -55,7 +55,7 @@ export default class MovieComingScreen extends Component {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
                     commentFetched: true,
-                    comment: responseData.videoList,
+                    comment: responseData.data,
                 });
             });
     }
@@ -95,14 +95,14 @@ export default class MovieComingScreen extends Component {
     _renderHeader() {
         let img;
         if (this.state.dataFetched) {
-            img = this.state.videoList.basic.img;
+            img = this.state.data.basic.img;
         } else {
             img = '#949494';
         }
-        const name = this.state.dataFetched ? this.state.videoList.basic.name : '电影名称';
-        const nameEn = this.state.dataFetched ? this.state.videoList.basic.nameEn : 'Movie Name';
-        const mins = this.state.dataFetched ? this.state.videoList.basic.mins : '影片时长';
-        const typeArray = this.state.dataFetched ? this.state.videoList.basic.type : '影片类型';
+        const name = this.state.dataFetched ? this.state.data.basic.name : '电影名称';
+        const nameEn = this.state.dataFetched ? this.state.data.basic.nameEn : 'Movie Name';
+        const mins = this.state.dataFetched ? this.state.data.basic.mins : '影片时长';
+        const typeArray = this.state.dataFetched ? this.state.data.basic.type : '影片类型';
         let type = '';
         for (let i = 0; i < typeArray.length; i++) {
             type = type + typeArray[i];
@@ -110,10 +110,10 @@ export default class MovieComingScreen extends Component {
                 type = type + '/';
             }
         }
-        const releaseDate = this.state.dataFetched ? this.state.videoList.basic.releaseDate : '上映时间';
-        const releaseArea = this.state.dataFetched ? this.state.videoList.basic.releaseArea : '地区';
-        const commentSpecial = this.state.dataFetched ? this.state.videoList.basic.commentSpecial : '评价';
-        const rate = this.state.dataFetched ? this.state.videoList.basic.overallRating : '评分';
+        const releaseDate = this.state.dataFetched ? this.state.data.basic.releaseDate : '上映时间';
+        const releaseArea = this.state.dataFetched ? this.state.data.basic.releaseArea : '地区';
+        const commentSpecial = this.state.dataFetched ? this.state.data.basic.commentSpecial : '评价';
+        const rate = this.state.dataFetched ? this.state.data.basic.overallRating : '评分';
 
         return (
             <View style={{
@@ -201,7 +201,7 @@ export default class MovieComingScreen extends Component {
         });
         //收藏图标
         let collectImg = this.state.collected ? require('../image/ic_collect_selected.png') : require('../image/ic_collect_normal.png');
-        const name = this.state.dataFetched ? this.state.videoList.basic.name : '电影名称';
+        const name = this.state.dataFetched ? this.state.data.basic.name : '电影名称';
         return (
             <Animated.View
                 style={[styles.header, {transform: [{translateY: title}],}]}>
@@ -241,7 +241,7 @@ export default class MovieComingScreen extends Component {
     //剧情简介
     _renderStory() {
         if (this.state.dataFetched) {
-            const story = this.state.videoList.basic.story;
+            const story = this.state.data.basic.story;
             const storyStyle = this.state.storyExpanded ? styles.storyExpand : styles.storyCollapse;
             const storyIcon = this.state.storyExpanded ? require('../image/ic_story_collapse.png') : require('../image/ic_story_expand.png');
             return (
@@ -272,8 +272,8 @@ export default class MovieComingScreen extends Component {
     //导演&演员
     _renderDirectorActor() {
         if (this.state.dataFetched) {
-            const actors = this.state.videoList.basic.actors;
-            const director = this.state.videoList.basic.director;
+            const actors = this.state.data.basic.actors;
+            const director = this.state.data.basic.director;
             return (
                 <View style={{
                     backgroundColor: "#ffffff",
@@ -342,8 +342,8 @@ export default class MovieComingScreen extends Component {
     //视频&图片
     _renderVideoImg() {
         if (this.state.dataFetched) {
-            const video = this.state.videoList.basic.video;
-            const stageImg = this.state.videoList.basic.stageImg;
+            const video = this.state.data.basic.video;
+            const stageImg = this.state.data.basic.stageImg;
             return (
                 <View style={{
                     backgroundColor: "#ffffff",
@@ -401,7 +401,7 @@ export default class MovieComingScreen extends Component {
     //电影票房
     _renderMovieBox() {
         if (this.state.dataFetched) {
-            const boxOffice = this.state.videoList.boxOffice;
+            const boxOffice = this.state.data.boxOffice;
             return (
                 <View style={{
                     flexDirection: 'row',

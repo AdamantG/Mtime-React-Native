@@ -381,18 +381,16 @@ export default class MovieDetailScreen extends Component {
                         <View style={{height: 120, backgroundColor: '#939393', marginTop: 40}}/>
                     </View>
                     {/*图片*/}
-                    <View style={{paddingBottom: 10, paddingHorizontal: 10}}>
+                    <TouchableOpacity style={{paddingBottom: 10, paddingHorizontal: 10}} onPress={this._onPressImage}>
                         <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
                             <Text style={{flex: 1, color: '#474747', fontSize: 14}}>图片</Text>
-                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: '#939393', fontSize: 14}}>{stageImg.count}</Text>
                                 <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
-                            </TouchableOpacity>
+                            </View>
                         </View>
-                        <TouchableOpacity >
-                            <Image source={{uri: stageImg.list[0].imgUrl}} style={{width: 120, height: 120}}/>
-                        </TouchableOpacity>
-                    </View>
+                        <Image source={{uri: stageImg.list[0].imgUrl}} style={{width: 120, height: 120}}/>
+                    </TouchableOpacity>
                 </View>
             );
         }
@@ -609,5 +607,17 @@ export default class MovieDetailScreen extends Component {
         const navigation = this.props.navigation;
         const params = navigation.state.params;
         navigation.navigate('VideoList', {movieId: params.movieId});
+    };
+
+    _onPressImage = () => {
+
+        const name = this.state.dataFetched ? this.state.data.basic.name : '电影名称';
+
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        navigation.navigate('ImageList', {
+            movieId: params.movieId,
+            name: name,
+        });
     };
 }
