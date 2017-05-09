@@ -7,7 +7,7 @@
 'use strict';
 
 import React, {Component} from "react";
-import {TouchableOpacity, View, StyleSheet, Text} from "react-native";
+import {TouchableOpacity, View, StyleSheet, Text, Image} from "react-native";
 import {NavigationActions} from "react-navigation";
 import {styles} from "../style/Styles";
 import Video from "react-native-video";
@@ -37,10 +37,16 @@ export default class VideoPlayScreen extends Component {
         const hightUrl = video.hightUrl;
 
         return (
-            <View style={styles.container}>
+            <View style={{
+                flex: 1,
+                backgroundColor: '#000000',
+            }}>
                 <TouchableOpacity
-                    style={styles.fullScreen}
-                    onPress={() => this.setState({paused: !this.state.paused})}
+                    style={{flex: 1,}}
+                    onPress={() =>
+                        // this.setState({paused: !this.state.paused});
+                        this.video.presentFullscreenPlayer()
+                    }
                 >
                     <Video
                         ref={(ref: Video) => {
@@ -48,12 +54,8 @@ export default class VideoPlayScreen extends Component {
                         }}
                         /* For ExoPlayer */
                         source={{uri: url}}
-                        style={styles.fullScreen}
-                        rate={this.state.rate}
-                        paused={this.state.paused}
-                        volume={this.state.volume}
-                        muted={this.state.muted}
-                        resizeMode={this.state.resizeMode}
+                        style={{flex: 1, backgroundColor: '#000000'}}
+                        resizeMode='contain'
                         onLoad={this.onLoad}
                         onProgress={this.onProgress}
                         onEnd={this.onEnd}
@@ -63,40 +65,13 @@ export default class VideoPlayScreen extends Component {
                     />
                 </TouchableOpacity>
 
-                <View style={styles.controls}>
-                    <View style={styles.generalControls}>
-                        <View style={styles.rateControl}>
-                            <TouchableOpacity onPress={() => {
-                                if (this.state.fullScreen) {
-                                    this.video.dismissFullscreenPlayer();
-                                } else {
-                                    this.video.presentFullscreenPlayer();
-                                }
-                            }}>
-                                <Text style={[styles.controlOption,]}>全屏</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.volumeControl}>
-                            {this.renderVolumeControl(0.5)}
-                            {this.renderVolumeControl(1)}
-                            {this.renderVolumeControl(1.5)}
-                        </View>
-
-                        <View style={styles.resizeModeControl}>
-                            {this.renderResizeModeControl('cover')}
-                            {this.renderResizeModeControl('contain')}
-                            {this.renderResizeModeControl('stretch')}
-                        </View>
-                    </View>
-
-                    <View style={styles.trackingControls}>
-                        <View style={styles.progress}>
-                            <View style={[styles.innerProgressCompleted, {flex: flexCompleted}]}/>
-                            <View style={[styles.innerProgressRemaining, {flex: flexRemaining}]}/>
-                        </View>
-                    </View>
-                </View>
+                {/*返回*/}
+                <TouchableOpacity
+                    style={{position: "absolute", top: 20, left: 10,}}
+                    onPress={this._onPressBack}
+                >
+                    <Image source={require('../image/ic_arrow_left.png')} style={styles.headerIcon}/>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -129,20 +104,6 @@ export default class VideoPlayScreen extends Component {
         return 0;
     };
 
-    renderRateControl(rate) {
-        const isSelected = (this.state.rate === rate);
-
-        return (
-            <TouchableOpacity onPress={() => {
-                this.video.presentFullscreenPlayer();
-                this.setState({rate})
-            }}>
-                <Text style={[styles.controlOption, {fontWeight: isSelected ? 'bold' : 'normal'}]}>
-                    {rate}x
-                </Text>
-            </TouchableOpacity>
-        );
-    }
 
     renderResizeModeControl(resizeMode) {
         const isSelected = (this.state.resizeMode === resizeMode);
