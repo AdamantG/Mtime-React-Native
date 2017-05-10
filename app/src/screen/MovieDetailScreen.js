@@ -330,7 +330,7 @@ export default class MovieDetailScreen extends Component {
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
-                    }}>
+                    }} onPress={this._onPressToCreditList}>
                         <Text style={{color: '#939393', fontSize: 14}}>全部</Text>
                         <Image source={require('../image/ic_arrow_right.png')} style={{width: 18, height: 18}}/>
                     </TouchableOpacity>
@@ -601,6 +601,12 @@ export default class MovieDetailScreen extends Component {
 
     _onPressShare = () => {
 
+    };
+
+    _onPressToCreditList = () => {
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        navigation.navigate('CreditList', {movieId: params.movieId});
     };
 
     _onPressVideo = () => {
