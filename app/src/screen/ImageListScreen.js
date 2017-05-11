@@ -23,10 +23,10 @@ export default class ImageListScreen extends Component {
     };
 
     componentDidMount() {
-        this.fetchVideos();
+        this.fetchImages();
     }
 
-    fetchVideos() {
+    fetchImages() {
 
         const navigation = this.props.navigation;
         const params = navigation.state.params;
@@ -35,9 +35,22 @@ export default class ImageListScreen extends Component {
         fetch('https://api-m.mtime.cn/Movie/ImageAll.api?movieId=' + movieId)
             .then((response) => response.json())
             .then((responseData) => {
+                let images = responseData.images;
+                let data = [];
+                for (let i = 0; i < (images.length / 4); i++) {
+                    let row = [];
+                    row.push(
+                        images[i * 4],
+                        images[i * 4 + 1],
+                        images[i * 4 + 2],
+                        images[i * 4 + 3],
+                    );
+                    data.push(row);
+                }
+
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
-                    imageList: responseData.images,
+                    imageList: data,
                 });
             })
             .catch((error) => {
@@ -65,17 +78,38 @@ export default class ImageListScreen extends Component {
                 </View>
                 <AnimatedFlatList
                     data={this.state.imageList}
-                    horizontal={false}
-                    numColumns={4}
                     renderItem={(item) => {
-                        const image = item.item.image;
+                        const imageRow = item.item;
                         return (
-                            <TouchableOpacity onPress={() => {
-                                this._onPressToBigImage(item.index)
+                            <View style={{
+                                height: 100,
+                                padding: 10,
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                alignItems: 'center'
                             }}>
-                                <Image source={{uri: image}} resizeMode={Image.resizeMode.cover}
-                                       style={[{width: 80, height: 80, margin: 11}]}/>
-                            </TouchableOpacity>
+                                {
+                                    imageRow.map((image, i) => {
+                                        try {
+                                            return (
+                                                <TouchableOpacity
+                                                    key={i}
+                                                    onPress={() => {
+                                                        this._onPressToBigImage(item.index)
+                                                    }}>
+                                                    <Image source={{uri: image.image}}
+                                                           resizeMode={Image.resizeMode.cover}
+                                                           style={[{width: 80, height: 80}]}/>
+                                                </TouchableOpacity>
+                                            );
+                                        } catch (error) {
+                                            return ( <View key={i} style={[{width: 80, height: 80}]}/>);
+                                        }
+
+                                    })
+                                }
+                            </View>
+
                         );
                     }}
                     keyExtractor={(item, index) => {
