@@ -15,9 +15,6 @@ export default class VideoItem extends Component {
     render() {
         const video = this.props.video.item;
         const image = video.image;//视频图片
-        if (image.toString() == "") {
-            return (<View/>);
-        }
         const title = video.title;//预告片名称
         const length = video.length;//预告片时长
 
