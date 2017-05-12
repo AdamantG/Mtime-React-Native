@@ -110,6 +110,7 @@ export default class VideoListScreen extends Component {
                     onEndReached={() => {
                         this.loadMoreVideos();
                     }}
+                    onEndReachedThreshold={0}
                     ItemSeparatorComponent={ItemSeparator}
                     ListFooterComponent={ListFooter}
                 />
