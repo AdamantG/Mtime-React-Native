@@ -1,7 +1,7 @@
 /**
  * author: liminjie
- * date: 2017/5/12
- * desc: 评论列表
+ * date: 2017/5/15
+ * desc: 长评论列表
  */
 
 'use strict';
@@ -10,14 +10,13 @@ import React, {Component} from "react";
 import {Image, Text, TouchableOpacity, View, Animated, FlatList} from "react-native";
 import {NavigationActions} from "react-navigation";
 import {styles} from "../style/Styles";
-import VideoItem from "../component/VideoItem";
 import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
-import CommentItem from "../component/CommentItem";
+import HotLongCommentItem from "../component/HotLongCommentItem";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-export default class CommentListScreen extends Component {
+export default class HotLongCommentListScreen extends Component {
 
     state = {
         commentList: [],
@@ -41,14 +40,13 @@ export default class CommentListScreen extends Component {
             pageIndex: 1,
             refresh: true,
         });
-        fetch('https://api-m.mtime.cn/Showtime/HotMovieComments.api?pageIndex=' + this.state.pageIndex + '&movieId=' + movieId)
+        fetch('https://api-m.mtime.cn/Movie/HotLongComments.api?pageIndex=' + this.state.pageIndex + '&movieId=' + movieId)
             .then((response) => response.json())
             .then((responseData) => {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
-                    commentList: responseData.data.cts,
-                    totalCount: responseData.data.totalCount,
-                    pageCount: responseData.data.tpc,
+                    commentList: responseData.comments,
+                    totalCount: responseData.totalCount,
                     refresh: false,
                 });
             })
@@ -70,12 +68,12 @@ export default class CommentListScreen extends Component {
             return
         }
 
-        fetch('https://api-m.mtime.cn/Showtime/HotMovieComments.api?pageIndex=' + (this.state.pageIndex + 1) + '&movieId=' + movieId)
+        fetch('https://api-m.mtime.cn/Movie/HotLongComments.api?pageIndex=' + (this.state.pageIndex + 1) + '&movieId=' + movieId)
             .then((response) => response.json())
             .then((responseData) => {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
-                    commentList: this.state.commentList.concat(responseData.data.cts),
+                    commentList: this.state.commentList.concat(responseData.comments),
                     pageIndex: this.state.pageIndex + 1,
                 });
             })
@@ -94,13 +92,12 @@ export default class CommentListScreen extends Component {
                         <Image source={require('../image/ic_arrow_left.png')} style={styles.headerIcon}/>
                     </TouchableOpacity>
 
-                    <Text style={[styles.headerTitleText, {alignSelf: 'center'}]}>短评({this.state.totalCount})</Text>
+                    <Text style={[styles.headerTitleText, {alignSelf: 'center'}]}>精选影评({this.state.totalCount})</Text>
                 </View>
-                <Text>最新短评</Text>
                 <AnimatedFlatList
                     data={this.state.commentList}
                     renderItem={(item) => {
-                        return (<CommentItem comment={item} navigation={this.props.navigation}/>);
+                        return (<HotLongCommentItem comment={item} navigation={this.props.navigation}/>);
                     }}
                     keyExtractor={(item, index) => {
                         return index.toString();
@@ -114,7 +111,7 @@ export default class CommentListScreen extends Component {
                         this.fetchComments()
                     }}
                     onEndReached={() => {
-                        this.loadMoreComments();
+                        // this.loadMoreComments();
                     }}
                     onEndReachedThreshold={50}
                     ItemSeparatorComponent={ItemSeparator}
