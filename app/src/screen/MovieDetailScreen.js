@@ -518,7 +518,7 @@ export default class MovieDetailScreen extends Component {
                     </TouchableOpacity>
                     <View style={{height: 0.5, backgroundColor: '#939393', margin: 10}}/>
                     <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',}}
-                                      onPress={this._onPressComment}>
+                                      onPress={this._onPressHotMovieComment}>
                         <Text style={{color: '#ff8601', fontSize: 14, marginBottom: 10}}>查看更多{mini.total}条评论</Text>
                     </TouchableOpacity>
                 </View>
@@ -579,7 +579,8 @@ export default class MovieDetailScreen extends Component {
                         </View>
                     </TouchableOpacity>
                     <View style={{height: 0.5, backgroundColor: '#939393', marginHorizontal: 10, marginBottom: 10}}/>
-                    <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',}}>
+                    <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',}}
+                                      onPress={this._onPressHotLongComment}>
                         <Text style={{color: '#ff8601', fontSize: 14, marginBottom: 10}}>查看更多{plus.total}条影评</Text>
                     </TouchableOpacity>
                 </View>
@@ -628,10 +629,15 @@ export default class MovieDetailScreen extends Component {
         });
     };
 
-    _onPressComment = () => {
+    _onPressHotMovieComment = () => {
         const navigation = this.props.navigation;
         const params = navigation.state.params;
-        navigation.navigate('CommentList', {movieId: params.movieId});
+        navigation.navigate('HotMovieCommentList', {movieId: params.movieId});
     };
 
+    _onPressHotLongComment = () => {
+        const navigation = this.props.navigation;
+        const params = navigation.state.params;
+        navigation.navigate('HotLongCommentList', {movieId: params.movieId});
+    };
 }
