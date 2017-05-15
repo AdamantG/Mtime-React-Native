@@ -1,7 +1,7 @@
 /**
  * author: liminjie
  * date: 2017/5/12
- * desc: 评论列表item
+ * desc: 短评论列表item
  */
 
 'use strict';
@@ -10,7 +10,7 @@ import React, {Component} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {styles} from "../style/Styles";
 
-export default class CommentItem extends Component {
+export default class HotMovieCommentItem extends Component {
 
     render() {
         const comment = this.props.comment.item;
@@ -22,7 +22,7 @@ export default class CommentItem extends Component {
         const commentCount = comment.commentCount > 0 ? comment.commentCount : '赞';//点赞数
 
         return (
-            <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 10}}>
+            <TouchableOpacity style={{flexDirection: 'row', padding: 10}}>
                 {/*头像*/}
                 <Image source={{uri: image}}
                        style={{width: 40, height: 40, marginRight: 10, borderRadius: 20}}/>
