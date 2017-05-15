@@ -17,7 +17,8 @@ import VideoPlayScreen from "./screen/VideoPlayScreen";
 import ImageListScreen from "./screen/ImageListScreen";
 import ImageDetailScreen from "./screen/ImageDetailScreen";
 import CreditListScreen from "./screen/CreditListScreen";
-import CommentListScreen from "./screen/CommentListScreen";
+import HotMovieCommentListScreen from "./screen/HotMovieCommentListScreen";
+import HotLongCommentListScreen from "./screen/HotLongCommentListScreen";
 
 const TabScreen = TabNavigator({
 
@@ -55,7 +56,8 @@ const stack = StackNavigator({
     VideoPlay: {screen: VideoPlayScreen},//视频播放
     ImageList: {screen: ImageListScreen},//剧照列表
     ImageDetail: {screen: ImageDetailScreen},//剧照放大浏览
-    CommentList: {screen: CommentListScreen},//评论列表
+    HotMovieCommentList: {screen: HotMovieCommentListScreen},//短评论列表
+    HotLongCommentList: {screen: HotLongCommentListScreen},//长评论列表
 }, {
     headerMode: 'none',
 });
