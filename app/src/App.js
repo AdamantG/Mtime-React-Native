@@ -21,9 +21,8 @@ import HotMovieCommentListScreen from "./screen/HotMovieCommentListScreen";
 import HotLongCommentListScreen from "./screen/HotLongCommentListScreen";
 
 const TabScreen = TabNavigator({
-
-    即将上映: {screen: MovieShowScreen},
     正在热映: {screen: MovieShowScreen},
+    即将上映: {screen: MovieComingScreen},
     }, {
         tabBarPosition: 'top',
         tabBarOptions: {
