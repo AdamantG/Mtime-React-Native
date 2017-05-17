@@ -8,6 +8,7 @@
 
 import React, {Component} from "react";
 import {ScrollView, Text, TouchableOpacity} from "react-native";
+import Attention from "../component/Attention";
 
 export default class MovieComingScreen extends Component {
 
@@ -16,6 +17,7 @@ export default class MovieComingScreen extends Component {
         movieComings: [],
         tab: ['', '', '', '', ''],
         tabIndex: 0,
+        baseMonth: 0,//选择月份
     };
 
     componentDidMount() {
@@ -37,6 +39,7 @@ export default class MovieComingScreen extends Component {
                     movieComings: responseData.moviecomings,
                     tab: tab,
                     tabIndex: 0,
+                    baseMonth: month
                 });
             });
     }
@@ -84,10 +87,12 @@ export default class MovieComingScreen extends Component {
                                     style={{
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        padding: 5,
+                                        margin: 10,
+                                        paddingHorizontal: 15,
+                                        paddingVertical: 5,
                                         backgroundColor: '#ff8601'
                                     }}>
-                                    <Text style={{fontSize: 12, color: '#ffffff'}}>{item}</Text>
+                                    <Text style={{fontSize: 14, color: '#ffffff'}}>{item}</Text>
                                 </TouchableOpacity>
                             );
                         } else {
@@ -102,10 +107,12 @@ export default class MovieComingScreen extends Component {
                                     style={{
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        padding: 5,
+                                        margin: 10,
+                                        paddingHorizontal: 15,
+                                        paddingVertical: 5,
                                         backgroundColor: '#ebebeb'
                                     }}>
-                                    <Text style={{fontSize: 12, color: '#999999'}}>{item}</Text>
+                                    <Text style={{fontSize: 14, color: '#999999'}}>{item}</Text>
                                 </TouchableOpacity>
                             );
                         }
@@ -117,7 +124,37 @@ export default class MovieComingScreen extends Component {
     }
 
     _renderAttention() {
+        if (this.state === null) {
+            return null;
+        }
+        const attention = this.state.attention;
+        if (attention === undefined) {
+            return null;
+        }
 
+        let data = [];
+
+        if (this.state.tabIndex === 0 || this.state.tabIndex === 4) {
+            data = data.concat(attention);
+        } else {
+            attention.map((item, i) => {
+                if (item.rMonth === (this.state.baseMonth + this.state.tabIndex - 1) % 12) {
+                    data.push(item);
+                }
+            })
+        }
+
+        return (
+            <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}>
+                {
+                    data.map((item, i) => {
+                        return <Attention attention={item} key={i}/>
+                    })
+                }
+            </ScrollView>
+        );
     }
 
     _renderMovieComings() {
