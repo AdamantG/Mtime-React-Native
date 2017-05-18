@@ -7,8 +7,9 @@
 'use strict';
 
 import React, {Component} from "react";
-import {ScrollView, Text, TouchableOpacity} from "react-native";
+import {ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Attention from "../component/Attention";
+import ComingItem from "../component/ComingItem";
 
 export default class MovieComingScreen extends Component {
 
@@ -150,7 +151,7 @@ export default class MovieComingScreen extends Component {
                 horizontal={true}>
                 {
                     data.map((item, i) => {
-                        return <Attention attention={item} key={i}/>
+                        return <Attention attention={item} key={i} navigation={this.props.navigation}/>
                     })
                 }
             </ScrollView>
@@ -158,6 +159,27 @@ export default class MovieComingScreen extends Component {
     }
 
     _renderMovieComings() {
+        if (this.state === null) {
+            return null;
+        }
+        const movieComings = this.state.movieComings;
+        if (movieComings === undefined) {
+            return null;
+        }
 
+        return (
+            <View>
+                {
+                    movieComings.map((item, i) => {
+                        return (
+                            <View key={i}>
+                                <ComingItem coming={item} navigation={this.props.navigation}/>
+                                <View style={{alignSelf: 'stretch', height: 1, backgroundColor: '#939393'}}/>
+                            </View>
+                        )
+                    })
+                }
+            </View>
+        );
     }
 }
