@@ -7,120 +7,115 @@
 'use strict';
 
 import React, {Component} from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {styles} from "../style/Styles";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 
 export default class ComingItem extends Component {
 
     render() {
-        const movie = this.props.movie.item;
-        const img = movie.img;//电影海报
-        if (img.toString() == "") {
-            return (<View/>);
-        }
-        const title = movie.tCn;//电影中文名
-        const rank = movie.r;//评分
-        const special = movie.commonSpecial;//一句话评价
-        const raiseDate = movie.rd;//上映时间
-        const cinemaCount = movie.cC;//上映电影院数
-        const showtimeCount = movie.NearestShowtimeCount;//上映场数
-        const versions = movie.versions;//观影标签
-        const ticketing = movie.isTicket;//售票
+        const coming = this.props.coming;
+        const image = coming.image;//电影封面
+        const title = coming.title;//电影名
+        const releaseDate = coming.releaseDate;//上映日期
+        const actor1 = coming.actor1;//演员1
+        const actor2 = coming.actor2;//演员2
+        const director = coming.director;//导演
+        const type = coming.type;//影片类型
+        const videoCount = coming.videoCount;//影片类型
+        const wantedCount = coming.wantedCount;//想看人数
+        const isTicket = coming.isTicket;//预售
 
         return (
-            <TouchableOpacity onPress={this._onPressToDetail}>
-                <View style={styles.container}>
-                    <Image source={{uri: img}} style={styles.img}/>
-                    <View style={styles.detail}>
-                        <View style={styles.detail_title}>
-                            <Text style={styles.text_title}>{title}  </Text>
-                            <Text style={styles.text_rank}>{rank}</Text>
-                        </View>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{
-                                width: 20,
-                                height: 20,
-                                textAlign: 'center',
-                                fontSize: 24,
-                                fontWeight: 'bold',
-                                color: '#ff8601'
-                            }}>“</Text>
-                            <Text style={styles.text_special}>{special}</Text>
-                        </View>
-                        <Text
-                            style={styles.text_date_cinema}>{raiseDate.substring(4, 6) * 1}月{raiseDate.substring(6, 8)}日上映</Text>
-                        <Text style={styles.text_date_cinema}>今日{cinemaCount}家影院上映{showtimeCount}场</Text>
-
-                        <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center'}}>
-                            <View style={{flex: 2, flexDirection: 'row'}}>
-                                <Text
-                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[0]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[0])}</Text>
-                                <Text
-                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[1]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[1])}</Text>
-                                <Text
-                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[2]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[2])}</Text>
-                            </View>
-                            <View style={{
-                                flex: 1,
-                                height: 30,
-                                justifyContent: 'center',
-                                backgroundColor: ticketing ? '#ff8601' : '#669d0e',
-                                borderRadius: 100
-                            }}>
-                                <TouchableOpacity onPress={this._onPressToTicket}>
-                                    <Text style={{
-                                        color: 'white',
-                                        fontSize: 12,
-                                        textAlign: 'center'
-                                    }}>{ShowItem.getTicking(ticketing)}</Text>
-                                </TouchableOpacity>
-
-                            </View>
-                        </View>
+            <TouchableOpacity style={{flexDirection: 'row', padding: 10}} onPress={this._onPressToDetail}>
+                {this._renderImage(videoCount, image)}
+                <View style={{paddingHorizontal: 5, flex: 1}}>
+                    <View style={{flexDirection: 'row', marginVertical: 5, alignItems: 'center'}}>
+                        <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
+                        <Text style={{fontSize: 12, color: '#999999'}}>  {releaseDate}</Text>
                     </View>
+                    <View style={{flexDirection: 'row', marginVertical: 5}}>
+                        <Text style={{fontSize: 12, color: '#ff8601'}}>{wantedCount}</Text>
+                        <Text style={{fontSize: 12, color: '#999999'}}>人想看 - {type}</Text>
+                    </View>
+                    <Text numberOfLines={1} style={{fontSize: 12, color: '#999999'}}>{actor1}/{actor2}/{director}</Text>
                 </View>
+                {this._renderButton(isTicket)}
             </TouchableOpacity>
         );
     }
 
-    /**
-     * 得到标签
-     * @param versions
-     * @returns {string}
-     */
-    static getVersion(versions) {
-        if (versions instanceof Object) {
-            return versions.version;
+    _renderImage(videoCount, image) {
+        if (videoCount > 0) {
+            return (
+                <TouchableOpacity style={[{backgroundColor: "#ffffff",}]}
+                                  onPress={this._onPressToVideo}>
+                    <Image source={{uri: image}} resizeMode={Image.resizeMode.cover}
+                           style={[{width: 50, height: 80}]}/>
+                    <View style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Image source={require('../image/ic_video_play.png')} style={{width: 25, height: 25}}/>
+                    </View>
+                </TouchableOpacity>
+            )
         } else {
-            return "";
+            return (
+                <View style={[{backgroundColor: "#ffffff",}]}>
+                    <Image source={{uri: image}} resizeMode={Image.resizeMode.cover}
+                           style={[{width: 50, height: 80,}]}/>
+                </View>
+            )
         }
     }
 
-    /**
-     * 检查是否存在标签
-     * @param versions
-     * @returns {boolean}
-     */
-    static checkVersion(versions) {
-        return versions instanceof Object;
+    _renderButton(isTicket) {
+        if (isTicket) {
+            return (
+                <TouchableOpacity style={{
+                    alignSelf: 'flex-end',
+                    borderRadius: 2,
+                    borderColor: '#639e02',
+                    borderWidth: 1,
+                    width: 50,
+                    height: 25,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Text style={{color: '#639e02', fontSize: 12}}>预售</Text>
+                </TouchableOpacity>
+            );
+        } else {
+            return (
+                <TouchableOpacity style={{
+                    alignSelf: 'flex-end',
+                    borderRadius: 2,
+                    borderColor: '#ff8601',
+                    borderWidth: 1,
+                    width: 50,
+                    height: 25,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Text style={{color: '#ff8601', fontSize: 12}}>想看</Text>
+                </TouchableOpacity>
+            );
+        }
     }
 
-    /**
-     * 得到购票状态
-     * @param ticketing
-     * @returns {string}
-     */
-    static getTicking(ticketing) {
-        return ticketing ? "购票" : "预售";
-    }
+    _onPressToVideo = () => {
+        const movieId = this.props.coming.id.toString();
+        this.props.navigation.navigate('VideoList', {movieId: movieId});
+    };
 
     _onPressToDetail = () => {
-        const movie = this.props.movie.item;
-        const movieId = movie.id.toString();
+        const movieId = this.props.coming.id.toString();
         this.props.navigation.navigate('Detail', {movieId: movieId});
     };
 
-    _onPressToTicket = () => {
-        this.props.navigation.navigate('Detail', {name: 'ticket'});
-    };
+
 }
