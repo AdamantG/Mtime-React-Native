@@ -20,12 +20,12 @@ export default class Attention extends Component {
         const rDay = attention.rDay;//日
         const wantedCount = attention.wantedCount;//想看人数
         return (
-            <View style={{
+            <TouchableOpacity style={{
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 margin: 5,
                 width: 100,
-            }}>
+            }} onPress={this._onPressToDetail}>
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -42,8 +42,13 @@ export default class Attention extends Component {
                     <Text style={{fontSize: 12, flex: 1}}>{wantedCount}人想看 </Text>
                     <Image source={require('../image/ic_like_selected.png')} style={{width: 12, height: 12}}/>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
 
     }
+
+    _onPressToDetail = () => {
+        const movieId = this.props.attention.id.toString();
+        this.props.navigation.navigate('Detail', {movieId: movieId});
+    };
 }
