@@ -60,22 +60,6 @@ export default class ShowItem extends Component {
                                 <Text
                                     style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[2]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[2])}</Text>
                             </View>
-                            <View style={{
-                                flex: 1,
-                                height: 30,
-                                justifyContent: 'center',
-                                backgroundColor: ticketing ? '#ff8601' : '#669d0e',
-                                borderRadius: 100
-                            }}>
-                                <TouchableOpacity onPress={this._onPressToTicket}>
-                                    <Text style={{
-                                        color: 'white',
-                                        fontSize: 12,
-                                        textAlign: 'center'
-                                    }}>{ShowItem.getTicking(ticketing)}</Text>
-                                </TouchableOpacity>
-
-                            </View>
                             {this._renderButton(ticketing)}
                         </View>
                     </View>
