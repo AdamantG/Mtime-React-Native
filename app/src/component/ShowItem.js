@@ -76,11 +76,46 @@ export default class ShowItem extends Component {
                                 </TouchableOpacity>
 
                             </View>
+                            {this._renderButton(ticketing)}
                         </View>
                     </View>
                 </View>
             </TouchableOpacity>
         );
+    }
+
+    _renderButton(isTicket) {
+        if (isTicket) {
+            return (
+                <TouchableOpacity style={{
+                    alignSelf: 'flex-end',
+                    borderRadius: 2,
+                    borderColor: '#639e02',
+                    borderWidth: 1,
+                    width: 50,
+                    height: 25,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Text style={{color: '#639e02', fontSize: 12}}>预售</Text>
+                </TouchableOpacity>
+            );
+        } else {
+            return (
+                <TouchableOpacity style={{
+                    alignSelf: 'flex-end',
+                    borderRadius: 2,
+                    borderColor: '#ff8601',
+                    borderWidth: 1,
+                    width: 50,
+                    height: 25,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Text style={{color: '#ff8601', fontSize: 12}}>购票</Text>
+                </TouchableOpacity>
+            );
+        }
     }
 
     /**
