@@ -54,11 +54,11 @@ export default class ShowItem extends Component {
                         <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center'}}>
                             <View style={{flex: 2, flexDirection: 'row'}}>
                                 <Text
-                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[0]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[0])}</Text>
+                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[0]) ? '#999999' : '#E9E9EF',}]}>{ShowItem.getVersion(versions[0])}</Text>
                                 <Text
-                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[1]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[1])}</Text>
+                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[1]) ? '#999999' : '#E9E9EF',}]}>{ShowItem.getVersion(versions[1])}</Text>
                                 <Text
-                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[2]) ? '#999999' : 'white',}]}>{ShowItem.getVersion(versions[2])}</Text>
+                                    style={[styles.text_version, {borderColor: ShowItem.checkVersion(versions[2]) ? '#999999' : '#E9E9EF',}]}>{ShowItem.getVersion(versions[2])}</Text>
                             </View>
                             {this._renderButton(ticketing)}
                         </View>
