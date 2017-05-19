@@ -28,10 +28,10 @@ export default class ComingItem extends Component {
             <TouchableOpacity style={{flexDirection: 'row', padding: 10}} onPress={this._onPressToDetail}>
                 {this._renderImage(videoCount, image)}
                 <View style={{paddingHorizontal: 5, flex: 1}}>
-                    <View style={{flexDirection: 'row', marginVertical: 5, alignItems: 'center'}}>
-                        <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
-                        <Text style={{fontSize: 12, color: '#999999'}}>  {releaseDate}</Text>
-                    </View>
+                    <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
+                    {/*<View style={{flexDirection: 'row', marginVertical: 5, alignItems: 'center'}}>*/}
+                        {/*<Text style={{fontSize: 12, color: '#999999'}}>  {releaseDate}</Text>*/}
+                    {/*</View>*/}
                     <View style={{flexDirection: 'row', marginVertical: 5}}>
                         <Text style={{fontSize: 12, color: '#ff8601'}}>{wantedCount}</Text>
                         <Text style={{fontSize: 12, color: '#999999'}}>人想看 - {type}</Text>
@@ -108,12 +108,12 @@ export default class ComingItem extends Component {
     }
 
     _onPressToVideo = () => {
-        const movieId = this.props.coming.id.toString();
+        const movieId = this.props.coming.id;
         this.props.navigation.navigate('VideoList', {movieId: movieId});
     };
 
     _onPressToDetail = () => {
-        const movieId = this.props.coming.id.toString();
+        const movieId = this.props.coming.id;
         this.props.navigation.navigate('Detail', {movieId: movieId});
     };
 
