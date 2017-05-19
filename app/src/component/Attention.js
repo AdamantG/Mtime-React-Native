@@ -13,7 +13,7 @@ import {styles} from "../style/Styles";
 
 export default class Attention extends Component {
     render() {
-        const attention = this.props.attention;
+        const attention = this.props.attention.item;
         const image = attention.image;//电影封面
         const title = attention.title;//电影名
         const rMonth = attention.rMonth;//月
