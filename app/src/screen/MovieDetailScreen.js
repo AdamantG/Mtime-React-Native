@@ -65,7 +65,6 @@ export default class MovieDetailScreen extends Component {
         return (
             <View style={{
                 flex: 1,
-                backgroundColor: '#333333'
             }}>
                 <ScrollView
                     onScroll={Animated.event(
@@ -73,22 +72,35 @@ export default class MovieDetailScreen extends Component {
                     )}
                     scrollEventThrottle={16}
                     style={{
-                        backgroundColor: '#ebebeb',
                     }}
                 >
                     {this._renderHeader()}
+                    {this._renderMargin()}
                     {this._renderStory()}
+                    {this._renderMargin()}
                     {this._renderDirectorActor()}
+                    {this._renderMargin()}
                     {this._renderVideoImg()}
+                    {this._renderMargin()}
                     {this._renderMovieBox()}
+                    {this._renderMargin()}
                     {this._renderMiniComment()}
+                    {this._renderMargin()}
                     {this._renderPlusComment()}
-                    <View style={{height: DEFAULT_MARGIN}}/>
+                    {this._renderMargin()}
                 </ScrollView>
                 {this._renderFixHeader()}
             </View>
 
         );
+    }
+
+    _renderMargin(){
+        return(
+            <View style={{
+                height:DEFAULT_MARGIN
+            }}/>
+        )
     }
 
     //详情卡片
@@ -120,7 +132,7 @@ export default class MovieDetailScreen extends Component {
                 height: HEADER_HEIGHT,
             }}>
                 <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
-                       style={[{backgroundColor: "#ffffff", flex: 1}]}/>
+                       style={[{flex: 1}]}/>
                 <View style={[{backgroundColor: "#ffffff", flex: 1}]}/>
                 <View style={{
                     position: "absolute",
@@ -131,7 +143,7 @@ export default class MovieDetailScreen extends Component {
                     flexDirection: 'row'
                 }}>
                     {/*海报封面*/}
-                    <TouchableOpacity style={[{backgroundColor: "#ffffff", marginLeft: 7, height: 143}]}
+                    <TouchableOpacity style={[{marginLeft: 7, height: 143}]}
                                       onPress={this._onPressVideo}>
                         <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
                                style={[{width: 100, height: 155, margin: 2}]}/>
@@ -247,7 +259,6 @@ export default class MovieDetailScreen extends Component {
             return (
                 <View style={{
                     backgroundColor: "#ffffff",
-                    marginTop: DEFAULT_MARGIN,
                     flexDirection: 'column',
                     paddingTop: 10,
                     paddingLeft: 10,
@@ -277,7 +288,6 @@ export default class MovieDetailScreen extends Component {
             return (
                 <View style={{
                     backgroundColor: "#ffffff",
-                    marginTop: DEFAULT_MARGIN,
                 }}>
                     <ScrollView horizontal={true}>
                         <View style={{flexDirection: 'row'}}>
@@ -347,7 +357,6 @@ export default class MovieDetailScreen extends Component {
             return (
                 <View style={{
                     backgroundColor: "#ffffff",
-                    marginTop: DEFAULT_MARGIN,
                     flexDirection: 'row'
                 }}>
                     {/*视频*/}
@@ -404,7 +413,6 @@ export default class MovieDetailScreen extends Component {
                 <View style={{
                     flexDirection: 'row',
                     backgroundColor: "#ffffff",
-                    marginTop: DEFAULT_MARGIN,
                     paddingVertical: 10
                 }}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -434,7 +442,7 @@ export default class MovieDetailScreen extends Component {
                 return null;
             }
             return (
-                <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff"}}>
+                <View style={{backgroundColor: "#ffffff"}}>
                     <View style={{paddingHorizontal: 10,}}>
                         <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
                             <Text style={{flex: 1, color: '#474747', fontSize: 14}}>短评</Text>
@@ -552,7 +560,7 @@ export default class MovieDetailScreen extends Component {
                 return null;
             }
             return (
-                <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff"}}>
+                <View style={{backgroundColor: "#ffffff"}}>
                     <View style={{paddingHorizontal: 10,}}>
                         <View style={{height: 40, alignItems: 'center', flexDirection: 'row'}}>
                             <Text style={{flex: 1, color: '#474747', fontSize: 14}}>影评</Text>
