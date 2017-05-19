@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
     },
     img: {
         width: 80,
@@ -33,7 +32,7 @@ export const styles = StyleSheet.create({
     },
     detail_title: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     text_title: {
         color: '#333333',
@@ -43,7 +42,8 @@ export const styles = StyleSheet.create({
     text_rank: {
         color: '#5d8a1c',
         fontStyle: 'italic',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        flex:1
     },
     text_special: {
         color: '#ff8601',
