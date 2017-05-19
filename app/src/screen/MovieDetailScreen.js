@@ -430,6 +430,9 @@ export default class MovieDetailScreen extends Component {
     _renderMiniComment() {
         if (this.state.commentFetched) {
             const mini = this.state.comment.mini;
+            if (mini.list.length < 2){
+                return null;
+            }
             return (
                 <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff"}}>
                     <View style={{paddingHorizontal: 10,}}>
@@ -545,6 +548,9 @@ export default class MovieDetailScreen extends Component {
     _renderPlusComment() {
         if (this.state.commentFetched) {
             const plus = this.state.comment.plus;
+            if (plus.list[0] === undefined){
+                return null;
+            }
             return (
                 <View style={{marginTop: DEFAULT_MARGIN, backgroundColor: "#ffffff"}}>
                     <View style={{paddingHorizontal: 10,}}>
