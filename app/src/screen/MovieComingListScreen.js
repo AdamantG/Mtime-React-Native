@@ -13,6 +13,7 @@ import ComingItem from "../component/ComingItem";
 import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 export default class MovieComingListScreen extends Component {
@@ -20,7 +21,7 @@ export default class MovieComingListScreen extends Component {
     state = {
         attention: [],
         movieComings: [],
-        comingData:[],
+        comingData: [],
         tab: ['', '', '', '', ''],
         tabIndex: 0,
         baseMonth: 0,//选择月份
@@ -31,7 +32,7 @@ export default class MovieComingListScreen extends Component {
         this.fetchComingMovies();
     }
 
-    fetchComingMovies(){
+    fetchComingMovies() {
         this.setState({
             refresh: true,
         });
@@ -54,7 +55,7 @@ export default class MovieComingListScreen extends Component {
                 for (let i = 0; i < dateSet.length; i++) {
                     let movieOnDate = [];//当天上映的电影集合
                     for (let j = 0; j < comingMovies.length; j++) {
-                        if (dateSet[i] === comingMovies[j].releaseDate){//如果日期匹配
+                        if (dateSet[i] === comingMovies[j].releaseDate) {//如果日期匹配
                             movieOnDate.push({
                                 coming: comingMovies[j],
                             })
@@ -96,24 +97,132 @@ export default class MovieComingListScreen extends Component {
             return null;
         }
         const movieComings = this.state.movieComings;
+
         if (movieComings === undefined) {
             return null;
         }
 
         return (
+            <ScrollView>
+                {this._renderAttention()}
+                {this._renderComingMovies()}
+            </ScrollView>
+        );
+    }
+
+    _renderAttention() {
+        if (this.state === null) {
+            return null;
+        }
+        const tabArray = this.state.tab;
+        if (tabArray === undefined) {
+            return null;
+        }
+
+        const attention = this.state.attention;
+        if (attention === undefined) {
+            return null;
+        }
+        let attentionArray = [];
+        if (this.state.tabIndex === 0 || this.state.tabIndex === 4) {
+            attentionArray = attentionArray.concat(attention);
+        } else {
+            attention.map((item, i) => {
+                if (item.rMonth === (this.state.baseMonth + this.state.tabIndex - 1) % 12) {
+                    attentionArray.push(item);
+                }
+            })
+        }
+
+        return (
+            <View>
+                <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    horizontal={true}
+                    style={{marginHorizontal: 10}}>
+                    {
+                        tabArray.map((item, i) => {
+                            if (i === this.state.tabIndex) {
+                                return (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.setState({
+                                                tabIndex: i,
+                                            });
+                                        }}
+                                        key={i}
+                                        style={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            margin: 10,
+                                            paddingHorizontal: 15,
+                                            paddingVertical: 5,
+                                            backgroundColor: '#ff8601'
+                                        }}>
+                                        <Text style={{fontSize: 14, color: '#ffffff'}}>{item}</Text>
+                                    </TouchableOpacity>
+                                );
+                            } else {
+                                return (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.setState({
+                                                tabIndex: i,
+                                            });
+                                        }}
+                                        key={i}
+                                        style={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            margin: 10,
+                                            paddingHorizontal: 15,
+                                            paddingVertical: 5,
+                                            backgroundColor: '#ebebeb'
+                                        }}>
+                                        <Text style={{fontSize: 14, color: '#999999'}}>{item}</Text>
+                                    </TouchableOpacity>
+                                );
+                            }
+                        })
+                    }
+                </ScrollView>
+                <AnimatedFlatList
+                    data={attentionArray}
+                    horizontal={true}
+                    renderItem={(item) => {
+                        return <Attention attention={item} navigation={this.props.navigation}/>
+                    }}
+                    keyExtractor={(item, index) => {
+                        return index.toString();
+                    }}
+                />
+            </View>
+        );
+    }
+
+    _renderComingMovies() {
+
+
+        return (
             <AnimatedSectionList
+                onScroll={Animated.event(
+                    [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
+                )}
+                scrollEventThrottle={16}
                 renderSectionHeader={this._renderSectionHeader}
                 renderItem={this._renderItem}
                 sections={this.state.comingData}
                 keyExtractor={(item, index) => {
                     return index;
                 }}
-                refreshing={this.state.refresh}
-                onRefresh={() => {
-                    this.fetchComingMovies();
-                }}
+                // refreshing={this.state.refresh}
+                // onRefresh={() => {
+                //     this.fetchComingMovies();
+                // }}
                 ItemSeparatorComponent={ItemSeparator}
                 ListFooterComponent={ListFooter}
+                // legacyImplementation={true}
+                // stickySectionHeadersEnabled={true}
             />
         );
     }
