@@ -289,45 +289,43 @@ export default class MovieDetailScreen extends Component {
                 <View style={{
                     backgroundColor: "#ffffff",
                 }}>
-                    <ScrollView horizontal={true}>
-                        <View style={{flexDirection: 'row'}}>
-                            {/*导演*/}
-                            <View style={{padding: 5}}>
-                                <View style={{
-                                    height: 40,
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    padding: 5
-                                }}><Text style={{color: '#474747', fontSize: 14}}>导演</Text></View>
-                                <TouchableOpacity>
-                                    <Director director={director}/>
-                                </TouchableOpacity>
-                            </View>
-                            {/*分隔线*/}
-                            <View style={{width: 0.5, alignSelf: 'stretch'}}>
-                                <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
-                            </View>
-                            {/*主要演员*/}
-                            <View style={{padding: 5}}>
-                                <View style={{
-                                    height: 40,
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    padding: 5
-                                }}><Text style={{color: '#474747', fontSize: 14}}>主要演员</Text></View>
-                                <View style={{
-                                    flexDirection: 'row'
-                                }}>
-                                    {
-                                        actors.map((actor, i) => {
-                                            return (
-                                                <TouchableOpacity key={i}>
-                                                    <Actor actor={actor}/>
-                                                </TouchableOpacity>
-                                            )
-                                        })
-                                    }
-                                </View>
+                    <ScrollView style={{flexDirection: 'row'}} horizontal={true}>
+                        {/*导演*/}
+                        <View style={{padding: 5}}>
+                            <View style={{
+                                height: 40,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: 5
+                            }}><Text style={{color: '#474747', fontSize: 14}}>导演</Text></View>
+                            <TouchableOpacity>
+                                <Director director={director}/>
+                            </TouchableOpacity>
+                        </View>
+                        {/*分隔线*/}
+                        <View style={{width: 0.5, alignSelf: 'stretch'}}>
+                            <View style={{height: 100, backgroundColor: '#939393', marginTop: 50}}/>
+                        </View>
+                        {/*主要演员*/}
+                        <View style={{padding: 5}}>
+                            <View style={{
+                                height: 40,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: 5
+                            }}><Text style={{color: '#474747', fontSize: 14}}>主要演员</Text></View>
+                            <View style={{
+                                flexDirection: 'row'
+                            }}>
+                                {
+                                    actors.map((actor, i) => {
+                                        return (
+                                            <TouchableOpacity key={i}>
+                                                <Actor actor={actor}/>
+                                            </TouchableOpacity>
+                                        )
+                                    })
+                                }
                             </View>
                         </View>
                     </ScrollView>
@@ -382,7 +380,6 @@ export default class MovieDetailScreen extends Component {
                             }}>
                                 <Image source={require('../image/ic_video_play.png')} style={{width: 40, height: 40}}/>
                             </View>
-
                         </View>
                     </TouchableOpacity>
                     {/*分隔线*/}
