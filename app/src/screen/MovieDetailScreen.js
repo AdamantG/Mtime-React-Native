@@ -143,10 +143,10 @@ export default class MovieDetailScreen extends Component {
                     flexDirection: 'row'
                 }}>
                     {/*海报封面*/}
-                    <TouchableOpacity style={[{marginLeft: 7, height: 143}]}
+                    <TouchableOpacity style={[{backgroundColor: "#ffffff", marginLeft: 7, height: 143}]}
                                       onPress={this._onPressVideo}>
                         <Image source={{uri: img}} resizeMode={Image.resizeMode.cover}
-                               style={[{width: 100, height: 155, margin: 2}]}/>
+                               style={[{width: 100, height: 155, margin: 2,}]}/>
                         <View style={{
                             position: "absolute",
                             left: 0,
