@@ -13,7 +13,7 @@ export default class ComingItem extends Component {
 
     render() {
         const coming = this.props.coming;
-        const image = coming.image;//电影封面
+        let image = coming.image;//电影封面
         const title = coming.title;//电影名
         const releaseDate = coming.releaseDate;//上映日期
         const actor1 = coming.actor1;//演员1
@@ -23,6 +23,10 @@ export default class ComingItem extends Component {
         const videoCount = coming.videoCount;//影片类型
         const wantedCount = coming.wantedCount;//想看人数
         const isTicket = coming.isTicket;//预售
+
+        if (image === undefined) {
+            image = 'http://img31.mtime.cn/ph/1463/1893463/1893463_1280X720X2.jpg';
+        }
 
         return (
             <TouchableOpacity style={{flexDirection: 'row', padding: 10}} onPress={this._onPressToDetail}>

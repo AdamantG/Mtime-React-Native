@@ -14,11 +14,16 @@ import {styles} from "../style/Styles";
 export default class Credit extends Component {
     render() {
         const credit = this.props.credit;
-        const image = credit.image;//头像
+        let image = credit.image;//头像
         const name = credit.name;//中文名
         const nameEn = credit.nameEn;//英文名
         const personate = credit.personate;//饰演角色名
         const roleCover = credit.roleCover;//角色封面
+
+        if (image === undefined) {
+            image = 'http://img31.mtime.cn/ph/1463/1893463/1893463_1280X720X2.jpg';
+        }
+
         return (
             <View style={{
                 flexDirection: 'row',

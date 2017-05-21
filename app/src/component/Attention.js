@@ -14,11 +14,15 @@ import {styles} from "../style/Styles";
 export default class Attention extends Component {
     render() {
         const attention = this.props.attention.item;
-        const image = attention.image;//电影封面
+        let image = attention.image;//电影封面
         const title = attention.title;//电影名
         const rMonth = attention.rMonth;//月
         const rDay = attention.rDay;//日
         const wantedCount = attention.wantedCount;//想看人数
+
+        if (image === undefined) {
+            image = 'http://img31.mtime.cn/ph/1463/1893463/1893463_1280X720X2.jpg';
+        }
         return (
             <TouchableOpacity style={{
                 flexDirection: 'column',
@@ -48,7 +52,7 @@ export default class Attention extends Component {
     }
 
     _onPressToDetail = () => {
-        const movieId = this.props.attention.id.toString();
+        const movieId = this.props.attention.item.id;
         this.props.navigation.navigate('Detail', {movieId: movieId});
     };
 }
