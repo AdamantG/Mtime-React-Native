@@ -16,6 +16,7 @@
 ## 部分截图
 <div>
 <img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/4.png" width = "40%"/>
+<img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/8.png" width = "40%"/>
 </div>
 <div>
 <img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/1.png" width = "40%"/>
@@ -28,4 +29,8 @@
 <div>
 <img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/6.png" width = "40%"/>
 <img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/7.png" width = "40%"/>
+</div>
+<div>
+<img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/9.png" width = "40%"/>
+<img src="https://github.com/452MJ/Mtime-React-Native/blob/master/screenshots/10.png" width = "40%"/>
 </div>
