@@ -81,6 +81,8 @@ export default class CreditListScreen extends Component {
                     }}
                     ItemSeparatorComponent={ItemSeparator}
                     ListFooterComponent={ListFooter}
+                    // legacyImplementation={true}
+                    // stickySectionHeadersEnabled={true}
                 />
 
             </View>
