@@ -23,8 +23,8 @@ import MovieComingListScreen from "./screen/MovieComingListScreen";
 
 const TabScreen = TabNavigator({
         正在热映: {screen: MovieShowScreen},
-        即将上映: {screen: MovieComingListScreen},
-        // 即将上映: {screen: MovieComingScreen},
+        // 即将上映: {screen: MovieComingListScreen},
+        即将上映: {screen: MovieComingScreen},
     }, {
         swipeEnabled: false,
         animationEnabled: false,

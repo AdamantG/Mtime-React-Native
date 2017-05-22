@@ -7,18 +7,18 @@
 'use strict';
 
 import React, {Component} from "react";
-import {ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {SectionList, Text, TouchableOpacity, View, Animated} from "react-native";
 import Attention from "../component/Attention";
 import ComingItem from "../component/ComingItem";
+import ItemSeparator from "../component/ItemSeparator";
+import ListFooter from "../component/ListFooter";
+
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 export default class MovieComingScreen extends Component {
 
     state: {
-        attention: [],
-        movieComings: [],
-        tab: ['', '', '', '', ''],
-        tabIndex: 0,
-        baseMonth: 0,//选择月份
+        comingData: [],
     };
 
     componentDidMount() {
@@ -28,158 +28,76 @@ export default class MovieComingScreen extends Component {
             .then((responseData) => {
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
 
-                let tab = [];
-                const month = responseData.attention[0].rMonth;
-                tab[0] = '最受关注';
-                tab[1] = month + '月大片';
-                tab[2] = (month + 1) % 12 + '月大片';
-                tab[3] = (month + 2) % 12 + '月大片';
-                tab[4] = '有望引进';
+                let comingData = [];
+                let comingMovies = responseData.moviecomings;
+
+                //得到日期数组
+                let date = [];
+                for (let i = 0; i < comingMovies.length; i++) {
+                    date.push(comingMovies[i].releaseDate);
+                }
+                //得到无重复日期数组
+                let dateSet = Array.from(new Set(date));
+
+                for (let i = 0; i < dateSet.length; i++) {
+                    let movieOnDate = [];//当天上映的电影集合
+                    for (let j = 0; j < comingMovies.length; j++) {
+                        if (dateSet[i] === comingMovies[j].releaseDate) {//如果日期匹配
+                            movieOnDate.push({
+                                coming: comingMovies[j],
+                            })
+                        }
+                    }
+                    comingData.push({
+                        data: movieOnDate,
+                        key: dateSet[i],
+                    })
+                }
                 this.setState({
-                    attention: responseData.attention,
-                    movieComings: responseData.moviecomings,
-                    tab: tab,
-                    tabIndex: 0,
-                    baseMonth: month
+                    comingData: comingData,
                 });
             });
     }
 
     render() {
 
+        if (this.state === null) {
+            return null;
+        }
+        const comingData = this.state.comingData;
+        if (comingData === undefined) {
+            return null;
+        }
+
         return (
-            <ScrollView
-                style={{
-                    flex: 1,
-                    backgroundColor: '#ffffff'
+            <AnimatedSectionList
+                renderSectionHeader={this._renderSectionHeader}
+                renderItem={this._renderItem}
+                sections={this.state.comingData}
+                keyExtractor={(item, index) => {
+                    return index;
                 }}
-            >
-                {this._renderAttentionTab()}
-                {this._renderAttention()}
-                {this._renderMovieComings()}
-            </ScrollView>
+                ItemSeparatorComponent={ItemSeparator}
+                ListFooterComponent={ListFooter}
+                getItemLayout={(data, index) => (
+                    // 143 是被渲染 item 的高度 ITEM_HEIGHT。
+                    {length: 101, offset: 101 * index, index}
+                )}
+            />
         );
     }
 
-    _renderAttentionTab() {
-        if (this.state === null) {
-            return null;
-        }
-        const tabArray = this.state.tab;
-        if (tabArray === undefined) {
-            return null;
-        }
+    _renderItem = (info) => {
+        return (<ComingItem coming={info.item.coming} navigation={this.props.navigation}/>);
+    };
+
+    _renderSectionHeader = (info) => {
         return (
-            <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-                style={{marginHorizontal: 10}}>
-                {
-                    tabArray.map((item, i) => {
-                        if (i === this.state.tabIndex) {
-                            return (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.setState({
-                                            tabIndex: i,
-                                        });
-                                    }}
-                                    key={i}
-                                    style={{
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        margin: 10,
-                                        paddingHorizontal: 15,
-                                        paddingVertical: 5,
-                                        backgroundColor: '#ff8601'
-                                    }}>
-                                    <Text style={{fontSize: 14, color: '#ffffff'}}>{item}</Text>
-                                </TouchableOpacity>
-                            );
-                        } else {
-                            return (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.setState({
-                                            tabIndex: i,
-                                        });
-                                    }}
-                                    key={i}
-                                    style={{
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        margin: 10,
-                                        paddingHorizontal: 15,
-                                        paddingVertical: 5,
-                                        backgroundColor: '#ebebeb'
-                                    }}>
-                                    <Text style={{fontSize: 14, color: '#999999'}}>{item}</Text>
-                                </TouchableOpacity>
-                            );
-                        }
-                    })
-                }
-            </ScrollView>
-
-        );
-    }
-
-    _renderAttention() {
-        if (this.state === null) {
-            return null;
-        }
-        const attention = this.state.attention;
-        if (attention === undefined) {
-            return null;
-        }
-
-        let data = [];
-
-        if (this.state.tabIndex === 0 || this.state.tabIndex === 4) {
-            data = data.concat(attention);
-        } else {
-            attention.map((item, i) => {
-                if (item.rMonth === (this.state.baseMonth + this.state.tabIndex - 1) % 12) {
-                    data.push(item);
-                }
-            })
-        }
-
-        return (
-            <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}>
-                {
-                    data.map((item, i) => {
-                        return <Attention attention={item} key={i} navigation={this.props.navigation}/>
-                    })
-                }
-            </ScrollView>
-        );
-    }
-
-    _renderMovieComings() {
-        if (this.state === null) {
-            return null;
-        }
-        const movieComings = this.state.movieComings;
-        if (movieComings === undefined) {
-            return null;
-        }
-
-        return (
-            <View>
-                {
-                    movieComings.map((item, i) => {
-                        return (
-                            <View key={i}>
-                                <ComingItem coming={item} navigation={this.props.navigation}/>
-                                <View style={{alignSelf: 'stretch', height: 1, backgroundColor: '#939393'}}/>
-                            </View>
-                        )
-                    })
-                }
-            </View>
-        );
-    }
+            <Text style={{
+                padding: 10,
+                backgroundColor: '#f6f6f6',
+                color: '#939393',
+                fontSize: 12
+            }}>{info.section.key}</Text>)
+    };
 }

@@ -53,11 +53,11 @@ export default class MovieShowScreen extends Component {
                     return (<ShowItem movie={item} navigation={this.props.navigation}/>);
                 }}
                 keyExtractor={(item, index) => {
-                    return index.toString();
+                    return index;
                 }}
                 getItemLayout={(data, index) => (
                     // 143 是被渲染 item 的高度 ITEM_HEIGHT。
-                    {length: 143, offset: 143 * index, index}
+                    {length: 144, offset: 144 * index, index}
                 )}
                 refreshing={this.state.refresh}
                 onRefresh={() => {

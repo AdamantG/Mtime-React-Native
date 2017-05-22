@@ -7,7 +7,7 @@
 'use strict';
 
 import React, {Component} from "react";
-import {Image, Text, TouchableOpacity, View, Animated, FlatList} from "react-native";
+import {Image, Text, TouchableOpacity, View, Animated, FlatList, Dimensions} from "react-native";
 import {NavigationActions} from "react-navigation";
 import {styles} from "../style/Styles";
 import VideoItem from "../component/VideoItem";
@@ -15,6 +15,7 @@ import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const {height, width} = Dimensions.get('window');
 
 export default class ImageListScreen extends Component {
 
@@ -50,7 +51,7 @@ export default class ImageListScreen extends Component {
 
                 // 注意，这里使用了this关键字，为了保证this在调用时仍然指向当前组件，我们需要对其进行“绑定”操作
                 this.setState({
-                    imageList: data,
+                    imageList: responseData.images,
                 });
             })
             .catch((error) => {
@@ -78,46 +79,27 @@ export default class ImageListScreen extends Component {
                 </View>
                 <AnimatedFlatList
                     data={this.state.imageList}
-                    renderItem={(item) => {
-                        const imageRow = item.item;
+                    numColumns={4}
+                    horizontal={false}
+                    renderItem={(item, index) => {
+                        const image = item.item;
                         return (
-                            <View style={{
-                                height: 100,
-                                padding: 10,
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                alignItems: 'center'
+                        <TouchableOpacity
+                            onPress={() => {
+                                this._onPressToBigImage(index)
                             }}>
-                                {
-                                    imageRow.map((image, i) => {
-                                        try {
-                                            return (
-                                                <TouchableOpacity
-                                                    key={i}
-                                                    onPress={() => {
-                                                        this._onPressToBigImage(item.index)
-                                                    }}>
-                                                    <Image source={{uri: image.image}}
-                                                           resizeMode={Image.resizeMode.cover}
-                                                           style={[{width: 80, height: 80}]}/>
-                                                </TouchableOpacity>
-                                            );
-                                        } catch (error) {
-                                            return ( <View key={i} style={[{width: 80, height: 80}]}/>);
-                                        }
-
-                                    })
-                                }
-                            </View>
-
+                            <Image source={{uri: image.image}}
+                                   resizeMode={Image.resizeMode.cover}
+                                   style={[{width: width/4, height: width/4}]}/>
+                        </TouchableOpacity>
                         );
                     }}
                     keyExtractor={(item, index) => {
-                        return index.toString();
+                        return index;
                     }}
                     getItemLayout={(data, index) => (
                         // 143 是被渲染 item 的高度 ITEM_HEIGHT。
-                        {length: 100, offset: 100 * index, index}
+                        {length: width/4, offset: width/4 * (index/4), index}
                     )}
                 />
             </View>

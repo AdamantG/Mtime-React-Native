@@ -101,7 +101,7 @@ export default class VideoListScreen extends Component {
                     }}
                     getItemLayout={(data, index) => (
                         // 143 是被渲染 item 的高度 ITEM_HEIGHT。
-                        {length: 143, offset: 143 * index, index}
+                        {length: 109, offset: 109 * index, index}
                     )}
                     refreshing={this.state.refresh}
                     onRefresh={() => {
