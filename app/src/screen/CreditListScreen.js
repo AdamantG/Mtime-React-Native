@@ -79,6 +79,10 @@ export default class CreditListScreen extends Component {
                     keyExtractor={(item, index) => {
                         return index;
                     }}
+                    getItemLayout={(data, index) => (
+                        // 143 是被渲染 item 的高度 ITEM_HEIGHT。
+                        {length: 81, offset: 81 * index, index}
+                    )}
                     ItemSeparatorComponent={ItemSeparator}
                     ListFooterComponent={ListFooter}
                     // legacyImplementation={true}
