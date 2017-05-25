@@ -6,7 +6,7 @@
 
 'use strict';
 
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Image, Text, TouchableOpacity, View, Animated, FlatList} from "react-native";
 import {NavigationActions} from "react-navigation";
 import {styles} from "../style/Styles";
@@ -16,7 +16,7 @@ import ListFooter from "../component/ListFooter";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-export default class VideoListScreen extends Component {
+export default class VideoListScreen extends PureComponent {
 
     state = {
         videoList: [],

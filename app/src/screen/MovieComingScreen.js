@@ -6,7 +6,7 @@
 
 'use strict';
 
-import React, {Component} from "react";
+import React, {Component, PureComponent} from "react";
 import {SectionList, Text, TouchableOpacity, View, Animated} from "react-native";
 import Attention from "../component/Attention";
 import ComingItem from "../component/ComingItem";
@@ -15,7 +15,7 @@ import ListFooter from "../component/ListFooter";
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
-export default class MovieComingScreen extends Component {
+export default class MovieComingScreen extends PureComponent {
 
     state: {
         comingData: [],

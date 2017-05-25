@@ -6,7 +6,7 @@
 
 'use strict';
 
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Animated, Image, SectionList, Text, TouchableOpacity, View} from "react-native";
 import {NavigationActions} from "react-navigation";
 import {styles} from "../style/Styles";
@@ -16,7 +16,7 @@ import Credit from "../component/Credit";
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
-export default class CreditListScreen extends Component {
+export default class CreditListScreen extends PureComponent {
 
     state = {
         dataSource: [],
