@@ -13,6 +13,11 @@ import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const VIEWABILITY_CONFIG = {
+    minimumViewTime: 3000,
+    viewAreaCoveragePercentThreshold: 100,
+    waitForInteraction: true,
+};
 
 export default class MovieShowScreen extends PureComponent {
 
@@ -59,12 +64,14 @@ export default class MovieShowScreen extends PureComponent {
                     // 143 是被渲染 item 的高度 ITEM_HEIGHT。
                     {length: 144, offset: 144 * index, index}
                 )}
+                initialNumToRender={5}
                 refreshing={this.state.refresh}
                 onRefresh={() => {
                     this.fetchShowMovies()
                 }}
                 ItemSeparatorComponent={ItemSeparator}
                 ListFooterComponent={ListFooter}
+                viewabilityConfig={VIEWABILITY_CONFIG}
             />
         );
     }
