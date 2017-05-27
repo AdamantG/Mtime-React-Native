@@ -23,8 +23,8 @@ import MovieComingListScreen from "./screen/MovieComingListScreen";
 
 const TabScreen = TabNavigator({
         正在热映: {screen: MovieShowScreen},
-        // 即将上映: {screen: MovieComingListScreen},
-        即将上映: {screen: MovieComingScreen},
+        即将上映: {screen: MovieDetailScreen},
+        //即将上映: {screen: MovieComingScreen},
     }, {
         swipeEnabled: false,
         animationEnabled: false,
@@ -53,7 +53,8 @@ TabScreen.navigationOptions = {
 };
 
 const stack = StackNavigator({
-    Home: {screen: TabScreen},          //主页
+    //Home: {screen: TabScreen},          //主页
+    Home: {screen: MovieComingListScreen},          //主页
     Detail: {screen: MovieDetailScreen},//电影详情
     CreditList: {screen: CreditListScreen},//演职员表
     VideoList: {screen: VideoListScreen},//视频列表

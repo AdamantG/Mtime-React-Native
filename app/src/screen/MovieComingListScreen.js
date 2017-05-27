@@ -6,17 +6,18 @@
 
 'use strict';
 
-import React, {Component} from "react";
+import React, {Component,PureComponent} from "react";
 import {ScrollView, Text, TouchableOpacity, Animated, FlatList, View, SectionList} from "react-native";
 import Attention from "../component/Attention";
 import ComingItem from "../component/ComingItem";
 import ItemSeparator from "../component/ItemSeparator";
 import ListFooter from "../component/ListFooter";
+import {styles} from "../style/Styles";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
-export default class MovieComingListScreen extends Component {
+export default class MovieComingListScreen extends PureComponent {
 
     state = {
         attention: [],
@@ -103,10 +104,16 @@ export default class MovieComingListScreen extends Component {
         }
 
         return (
+        <View>
+            <View style={[styles.headerBackground, {justifyContent: 'center'}]}>
+                <Text style={[styles.headerTitleText, {alignSelf: 'center'}]}>时光网</Text>
+            </View>
             <ScrollView>
                 {this._renderAttention()}
                 {this._renderComingMovies()}
             </ScrollView>
+        </View>
+
         );
     }
 
@@ -186,16 +193,27 @@ export default class MovieComingListScreen extends Component {
                         })
                     }
                 </ScrollView>
-                <AnimatedFlatList
-                    data={attentionArray}
-                    horizontal={true}
-                    renderItem={(item) => {
-                        return <Attention attention={item} navigation={this.props.navigation}/>
-                    }}
-                    keyExtractor={(item, index) => {
-                        return index.toString();
-                    }}
-                />
+
+                <ScrollView
+                    showsHorizontalScrollIndicator={true}
+                    horizontal={true}>
+                    {
+                        attentionArray.map((item, i) => {
+                            return <Attention attention={item} key={i} navigation={this.props.navigation}/>;
+                        })
+                    }
+                </ScrollView>
+
+                {/*<AnimatedFlatList*/}
+                    {/*data={attentionArray}*/}
+                    {/*horizontal={true}*/}
+                    {/*renderItem={(item) => {*/}
+                        {/*return <Attention attention={item} navigation={this.props.navigation}/>*/}
+                    {/*}}*/}
+                    {/*keyExtractor={(item, index) => {*/}
+                        {/*return index.toString();*/}
+                    {/*}}*/}
+                {/*/>*/}
             </View>
         );
     }

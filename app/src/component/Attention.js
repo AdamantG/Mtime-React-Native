@@ -13,7 +13,7 @@ import {styles} from "../style/Styles";
 
 export default class Attention extends Component {
     render() {
-        const attention = this.props.attention.item;
+        const attention = this.props.attention;
         let image = attention.image;//电影封面
         const title = attention.title;//电影名
         const rMonth = attention.rMonth;//月
@@ -52,7 +52,7 @@ export default class Attention extends Component {
     }
 
     _onPressToDetail = () => {
-        const movieId = this.props.attention.item.id;
+        const movieId = this.props.attention.id;
         this.props.navigation.navigate('Detail', {movieId: movieId});
     };
 }
